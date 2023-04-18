@@ -1,0 +1,8 @@
+#ignore Mac system files
+.DS_Store
+
+#ignore virtual environment folder
+env
+
+#ignore pycache
+*.pyc
