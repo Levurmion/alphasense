@@ -14,11 +14,11 @@ bootstrap_lines=$3
 num_lines=$(wc -l < $input_file)
 
 # generate a random sample of line numbers to bootstrap
-jot -r "$bootstrap_lines" 2 "$num_lines" > line_numbers.txt
-echo "1" >> line_numbers.txt # always include the first line as headers
+echo "1" >> line_numbers.txt
+shuf -i 2-$num_lines -n $bootstrap_lines > line_numbers.txt
 
 # bootstrap the selected lines from the input file and output to a new file
-awk 'NR==FNR{a[$0];next} FNR in a' line_numbers.txt $input_file > $output_file
+awk 'NR==FNR{array[$0];next} FNR in array' line_numbers.txt $input_file > $output_file
 
 # clean up
 rm line_numbers.txt
