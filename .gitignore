@@ -3,6 +3,8 @@
 
 #ignore virtual environment folder
 env
+venv
+pypy3
 
 #ignore pycache
 *.pyc

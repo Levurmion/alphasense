@@ -11,9 +11,10 @@ reviewedProteins_path = os.path.join(FILES_PATH, sys.argv[2])
 output_path = os.path.join(FILES_PATH, sys.argv[3])
 
 print('loading human variants file into dataframe...')
-humanVariants_df = pd.read_csv(humanVariants_path, sep='\t')
+humanVariants_df = pd.read_csv(humanVariants_path, sep='\t', header=0)
+print(humanVariants_df.columns)
 print('loading reviewed proteins list into dataframe...')
-reviewedProteins_df = pd.read_csv(reviewedProteins_path, sep='\t')
+reviewedProteins_df = pd.read_csv(reviewedProteins_path, sep='\t', header=0)
 
 REVIEWED_PROTEINS = {}
 
@@ -21,6 +22,7 @@ for idx, protein in reviewedProteins_df.loc[:, 'Entry'].items():
     REVIEWED_PROTEINS[protein] = idx
 
 clinicalSigRegex = r'\b(conflicting|uncertain|Conflicting|Uncertain)\b'
+indelRegex = r'\b(delins)\b'
 
 line = 0
 
@@ -32,7 +34,10 @@ with open(output_path, 'w') as outfile:
             
             try:
                 proteinReviewed = REVIEWED_PROTEINS[row['AC']]
-                outfile.write(row['Chromosome Coordinate'] + '\n')
+                if bool(re.search(indelRegex, row['Chromosome Coordinate'])) == False:
+                    outfile.write(row['Chromosome Coordinate'] + '\n')
+                else:
+                    pass
             except KeyError:
                 pass
         
