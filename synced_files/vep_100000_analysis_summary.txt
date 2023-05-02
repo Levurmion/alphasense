@@ -1,0 +1,845 @@
+vep records with no uniprot: 4904
+vep records without matching uniprot: 28
+vep records with matching mutation: 95295
+vep records without matching mutation: 48
+
+### RECORDS WITHOUT MATCHING UNIPROT
+Uploaded_variation    NC_000016.10:g.2530584G>A
+SWISSPROT                            Q9Y303.162
+REF_ALLELE                                    G
+Allele                                        A
+Consequence                    missense_variant
+Protein_position                            537
+Amino_acids                                 G/D
+CLIN_SIG                                      -
+gnomADg_AF                                    -
+CANONICAL                                     -
+Name: 389, dtype: object
+Uploaded_variation    NC_000018.10:g.35254379C>T
+SWISSPROT                             Q8NF99.175
+REF_ALLELE                                     C
+Allele                                         T
+Consequence                     missense_variant
+Protein_position                             265
+Amino_acids                                  P/L
+CLIN_SIG                                       -
+gnomADg_AF                                     -
+CANONICAL                                      -
+Name: 4565, dtype: object
+Uploaded_variation    NC_000010.11:g.100984054G>A
+SWISSPROT                              Q8N983.163
+REF_ALLELE                                      G
+Allele                                          A
+Consequence                    synonymous_variant
+Protein_position                              162
+Amino_acids                                     G
+CLIN_SIG                                        -
+gnomADg_AF                              6.574e-06
+CANONICAL                                       -
+Name: 5231, dtype: object
+Uploaded_variation    NC_000015.10:g.89333669G>C
+SWISSPROT                          A0A3B3IS91.15
+REF_ALLELE                                     G
+Allele                                         C
+Consequence                   synonymous_variant
+Protein_position                              47
+Amino_acids                                    L
+CLIN_SIG                  uncertain_significance
+gnomADg_AF                                     -
+CANONICAL                                    YES
+Name: 7856, dtype: object
+Uploaded_variation    NC_000003.12:g.159886308C>A
+SWISSPROT                               P0DPB3.29
+REF_ALLELE                                      C
+Allele                                          A
+Consequence                      missense_variant
+Protein_position                               84
+Amino_acids                                   T/N
+CLIN_SIG                                        -
+gnomADg_AF                                      -
+CANONICAL                                     YES
+Name: 13878, dtype: object
+Uploaded_variation    NC_000007.14:g.138837992A>G
+SWISSPROT                               A2RRL7.94
+REF_ALLELE                                      A
+Allele                                          G
+Consequence                      missense_variant
+Protein_position                               93
+Amino_acids                                   E/G
+CLIN_SIG                                        -
+gnomADg_AF                                      -
+CANONICAL                                       -
+Name: 15558, dtype: object
+Uploaded_variation                           NC_000015.10:g.89333618T>C
+SWISSPROT                                                 A0A3B3IS91.15
+REF_ALLELE                                                            T
+Allele                                                                C
+Consequence                                          synonymous_variant
+Protein_position                                                     64
+Amino_acids                                                           A
+CLIN_SIG              uncertain_significance,conflicting_interpretat...
+gnomADg_AF                                                            -
+CANONICAL                                                           YES
+Name: 16356, dtype: object
+Uploaded_variation    NC_000015.10:g.89333120G>A
+SWISSPROT                          A0A3B3IS91.15
+REF_ALLELE                                     G
+Allele                                         A
+Consequence                   synonymous_variant
+Protein_position                             230
+Amino_acids                                    G
+CLIN_SIG                  uncertain_significance
+gnomADg_AF                              6.57e-06
+CANONICAL                                    YES
+Name: 22104, dtype: object
+Uploaded_variation    NC_000003.12:g.184283878G>A
+SWISSPROT                               P0DPD6.29
+REF_ALLELE                                      G
+Allele                                          A
+Consequence                      missense_variant
+Protein_position                              304
+Amino_acids                                   E/K
+CLIN_SIG                                        -
+gnomADg_AF                                      -
+CANONICAL                                     YES
+Name: 23252, dtype: object
+Uploaded_variation    NC_000004.12:g.69639472G>T
+SWISSPROT                              P0DTE4.10
+REF_ALLELE                                     G
+Allele                                         T
+Consequence                     missense_variant
+Protein_position                             258
+Amino_acids                                  H/N
+CLIN_SIG                                       -
+gnomADg_AF                                     -
+CANONICAL                                      -
+Name: 29864, dtype: object
+Uploaded_variation    NC_000015.10:g.89333627T>C
+SWISSPROT                          A0A3B3IS91.15
+REF_ALLELE                                     T
+Allele                                         C
+Consequence                   synonymous_variant
+Protein_position                              61
+Amino_acids                                    A
+CLIN_SIG                    benign,likely_benign
+gnomADg_AF                               0.01418
+CANONICAL                                    YES
+Name: 32025, dtype: object
+Uploaded_variation    NC_000017.11:g.40093261G>T
+SWISSPROT                             P10827.246
+REF_ALLELE                                     G
+Allele                                         T
+Consequence                     missense_variant
+Protein_position                             451
+Amino_acids                                  G/V
+CLIN_SIG                                       -
+gnomADg_AF                                     -
+CANONICAL                                      -
+Name: 33377, dtype: object
+Uploaded_variation    NC_000015.10:g.89333717G>C
+SWISSPROT                          A0A3B3IS91.15
+REF_ALLELE                                     G
+Allele                                         C
+Consequence                     missense_variant
+Protein_position                              31
+Amino_acids                                  H/Q
+CLIN_SIG                  uncertain_significance
+gnomADg_AF                             1.971e-05
+CANONICAL                                    YES
+Name: 34231, dtype: object
+Uploaded_variation    NC_000002.12:g.46941608G>A
+SWISSPROT                             Q8NI22.165
+REF_ALLELE                                     G
+Allele                                         A
+Consequence                     missense_variant
+Protein_position                              19
+Amino_acids                                  S/L
+CLIN_SIG                                       -
+gnomADg_AF                                     -
+CANONICAL                                      -
+Name: 39141, dtype: object
+Uploaded_variation    NC_000001.11:g.171638716G>T
+SWISSPROT                           A0A1B0GUC4.20
+REF_ALLELE                                      G
+Allele                                          T
+Consequence                    synonymous_variant
+Protein_position                              107
+Amino_acids                                     T
+CLIN_SIG                                        -
+gnomADg_AF                                      -
+CANONICAL                                       -
+Name: 42269, dtype: object
+Uploaded_variation    NC_000017.11:g.40093194C>T
+SWISSPROT                             P20393.229
+REF_ALLELE                                     C
+Allele                                         T
+Consequence                   synonymous_variant
+Protein_position                             578
+Amino_acids                                    R
+CLIN_SIG                                       -
+gnomADg_AF                             1.314e-05
+CANONICAL                                    YES
+Name: 42867, dtype: object
+Uploaded_variation    NC_000001.11:g.111503216T>C
+SWISSPROT                               P0DMS9.47
+REF_ALLELE                                      T
+Allele                                          C
+Consequence                      missense_variant
+Protein_position                               47
+Amino_acids                                   T/A
+CLIN_SIG                                        -
+gnomADg_AF                                      -
+CANONICAL                                     YES
+Name: 44317, dtype: object
+Uploaded_variation    NC_000003.12:g.9765889C>G
+SWISSPROT                            O15527.223
+REF_ALLELE                                    C
+Allele                                        G
+Consequence                  synonymous_variant
+Protein_position                            343
+Amino_acids                                   P
+CLIN_SIG                                      -
+gnomADg_AF                            6.572e-06
+CANONICAL                                     -
+Name: 52883, dtype: object
+Uploaded_variation    NC_000003.12:g.131016189A>C
+SWISSPROT                              P98194.219
+REF_ALLELE                                      A
+Allele                                          C
+Consequence                             stop_lost
+Protein_position                              889
+Amino_acids                                   */C
+CLIN_SIG                                        -
+gnomADg_AF                                      -
+CANONICAL                                       -
+Name: 60356, dtype: object
+Uploaded_variation              NC_000009.12:g.21971179C>T
+SWISSPROT                                       P42771.233
+REF_ALLELE                                               C
+Allele                                                   T
+Consequence                             synonymous_variant
+Protein_position                                        60
+Amino_acids                                              A
+CLIN_SIG              uncertain_significance,likely_benign
+gnomADg_AF                                       6.571e-06
+CANONICAL                                              YES
+Name: 72205, dtype: object
+Uploaded_variation    NC_000003.12:g.159888929A>C
+SWISSPROT                               P0DPB3.29
+REF_ALLELE                                      A
+Allele                                          C
+Consequence                      missense_variant
+Protein_position                              192
+Amino_acids                                   H/P
+CLIN_SIG                                        -
+gnomADg_AF                                      -
+CANONICAL                                     YES
+Name: 72614, dtype: object
+Uploaded_variation    NC_012920.1:m.8566A>G
+SWISSPROT                        P03928.193
+REF_ALLELE                                A
+Allele                                    G
+Consequence              synonymous_variant
+Protein_position                         67
+Amino_acids                               Q
+CLIN_SIG                             benign
+gnomADg_AF                                -
+CANONICAL                               YES
+Name: 77114, dtype: object
+Uploaded_variation    NC_000004.12:g.69639397C>T
+SWISSPROT                              P0DTE4.10
+REF_ALLELE                                     C
+Allele                                         T
+Consequence                     missense_variant
+Protein_position                             283
+Amino_acids                                  V/M
+CLIN_SIG                                       -
+gnomADg_AF                             3.946e-05
+CANONICAL                                      -
+Name: 78991, dtype: object
+Uploaded_variation    NC_000011.10:g.62664896A>G
+SWISSPROT                              E9PRG8.61
+REF_ALLELE                                     A
+Allele                                         G
+Consequence                   synonymous_variant
+Protein_position                              39
+Amino_acids                                    A
+CLIN_SIG                                       -
+gnomADg_AF                             1.314e-05
+CANONICAL                                    YES
+Name: 86081, dtype: object
+Uploaded_variation              NC_000009.12:g.21971008C>T
+SWISSPROT                                       P42771.233
+REF_ALLELE                                               C
+Allele                                                   T
+Consequence                             synonymous_variant
+Protein_position                                       117
+Amino_acids                                              L
+CLIN_SIG              uncertain_significance,likely_benign
+gnomADg_AF                                               -
+CANONICAL                                              YES
+Name: 88388, dtype: object
+Uploaded_variation    NC_000005.10:g.53107115G>A
+SWISSPROT                             O96007.168
+REF_ALLELE                                     G
+Allele                                         A
+Consequence                   synonymous_variant
+Protein_position                              20
+Amino_acids                                    S
+CLIN_SIG                  uncertain_significance
+gnomADg_AF                                     -
+CANONICAL                                    YES
+Name: 88841, dtype: object
+Uploaded_variation    NC_000001.11:g.171638644A>C
+SWISSPROT                           A0A1B0GUC4.20
+REF_ALLELE                                      A
+Allele                                          C
+Consequence                    synonymous_variant
+Protein_position                               83
+Amino_acids                                     S
+CLIN_SIG                                        -
+gnomADg_AF                                      -
+CANONICAL                                       -
+Name: 92642, dtype: object
+Uploaded_variation    NC_000004.12:g.102885324T>C
+SWISSPROT                              Q4ZJI4.138
+REF_ALLELE                                      T
+Allele                                          C
+Consequence                      missense_variant
+Protein_position                              446
+Amino_acids                                   N/S
+CLIN_SIG                                        -
+gnomADg_AF                                      -
+CANONICAL                                       -
+Name: 95589, dtype: object
+
+----------------------------------
+### RECORDS WITHOUT MATCHING MUTATION (BUT UNIPROT MATCHES)
+Uploaded_variation    NC_000007.14:g.41965064_41965066delinsACT
+SWISSPROT                                            P10071.223
+REF_ALLELE                                                  CCC
+Allele                                                      ACT
+Consequence                                    missense_variant
+Protein_position                                      1336-1337
+Amino_acids                                               GA/ES
+CLIN_SIG                                 uncertain_significance
+gnomADg_AF                                                    -
+CANONICAL                                                   YES
+Name: 5996, dtype: object
+Uploaded_variation    NC_000008.11:g.12737134C>A
+SWISSPROT                             Q17RB8.138
+REF_ALLELE                                     C
+Allele                                         A
+Consequence                          stop_gained
+Protein_position                             374
+Amino_acids                                  E/*
+CLIN_SIG                                       -
+gnomADg_AF                                     -
+CANONICAL                                    YES
+Name: 7477, dtype: object
+Uploaded_variation               NC_000002.12:g.201209562G>T
+SWISSPROT                                         Q92851.224
+REF_ALLELE                                                 G
+Allele                                                     T
+Consequence           missense_variant,splice_region_variant
+Protein_position                                         472
+Amino_acids                                              R/I
+CLIN_SIG                                                   -
+gnomADg_AF                                                 -
+CANONICAL                                                YES
+Name: 8603, dtype: object
+Uploaded_variation    NC_000011.10:g.1018090_1018095delinsTGGTTA
+SWISSPROT                                             Q6W4X9.134
+REF_ALLELE                                                GTGGTG
+Allele                                                    TGGTTA
+Consequence                                     missense_variant
+Protein_position                                       1569-1571
+Amino_acids                                              PPP/LTT
+CLIN_SIG                                                       -
+gnomADg_AF                                                     -
+CANONICAL                                                    YES
+Name: 11528, dtype: object
+Uploaded_variation    NC_000003.12:g.195762138C>A
+SWISSPROT                              Q99102.168
+REF_ALLELE                                      C
+Allele                                          A
+Consequence                      missense_variant
+Protein_position                             4821
+Amino_acids                                   A/S
+CLIN_SIG                                        -
+gnomADg_AF                                 0.6354
+CANONICAL                                     YES
+Name: 12356, dtype: object
+Uploaded_variation    NC_000013.11:g.32337278_32337282delinsGACAT
+SWISSPROT                                              P51587.233
+REF_ALLELE                                                  ATCTC
+Allele                                                      GACAT
+Consequence                                      missense_variant
+Protein_position                                          975-976
+Amino_acids                                                 IS/DI
+CLIN_SIG                                   uncertain_significance
+gnomADg_AF                                                      -
+CANONICAL                                                     YES
+Name: 13503, dtype: object
+Uploaded_variation    CHR_HSCHR12_3_CTG2:g.10930757A>T
+SWISSPROT                                   P02810.186
+REF_ALLELE                                           A
+Allele                                               T
+Consequence                           missense_variant
+Protein_position                                    66
+Amino_acids                                        N/Y
+CLIN_SIG                                             -
+gnomADg_AF                                           -
+CANONICAL                                          YES
+Name: 15580, dtype: object
+Uploaded_variation    NC_000019.10:g.54242113C>A
+SWISSPROT                             Q6PI73.134
+REF_ALLELE                                     C
+Allele                                         A
+Consequence                          stop_gained
+Protein_position                              90
+Amino_acids                                  E/*
+CLIN_SIG                                       -
+gnomADg_AF                                     0
+CANONICAL                                    YES
+Name: 18217, dtype: object
+Uploaded_variation    NC_000001.11:g.62210220_62210222delinsGGG
+SWISSPROT                                            Q5T7N2.134
+REF_ALLELE                                                  AGA
+Allele                                                      GGG
+Consequence                                    missense_variant
+Protein_position                                        482-483
+Amino_acids                                               EE/EG
+CLIN_SIG                                                      -
+gnomADg_AF                                                    -
+CANONICAL                                                   YES
+Name: 18882, dtype: object
+Uploaded_variation        NC_000011.10:g.108332848_108332849delinsGC
+SWISSPROT                                                 Q13315.252
+REF_ALLELE                                                        TG
+Allele                                                            GC
+Consequence                                         missense_variant
+Protein_position                                           2625-2626
+Amino_acids                                                    DA/EP
+CLIN_SIG              pathogenic/likely_pathogenic,likely_pathogenic
+gnomADg_AF                                                         -
+CANONICAL                                                        YES
+Name: 18958, dtype: object
+Uploaded_variation    NC_000016.10:g.582967C>T
+SWISSPROT                           Q9BRB3.166
+REF_ALLELE                                   C
+Allele                                       T
+Consequence                 synonymous_variant
+Protein_position                           560
+Amino_acids                                  L
+CLIN_SIG                                     -
+gnomADg_AF                           6.571e-06
+CANONICAL                                  YES
+Name: 21180, dtype: object
+Uploaded_variation    NC_000009.12:g.136011824_136011825inv
+SWISSPROT                                        Q96BF6.154
+REF_ALLELE                                               CA
+Allele                                                   TG
+Consequence                                missense_variant
+Protein_position                                    485-486
+Amino_acids                                           PA/PT
+CLIN_SIG                                                  -
+gnomADg_AF                                                -
+CANONICAL                                               YES
+Name: 22360, dtype: object
+Uploaded_variation    NC_000011.10:g.68047652G>A
+SWISSPROT                             Q13488.202
+REF_ALLELE                                     G
+Allele                                         A
+Consequence                          stop_gained
+Protein_position                             437
+Amino_acids                                  W/*
+CLIN_SIG                                       -
+gnomADg_AF                                     -
+CANONICAL                                    YES
+Name: 26299, dtype: object
+Uploaded_variation    NC_000022.11:g.28795577T>C
+SWISSPROT                             P17861.212
+REF_ALLELE                                     T
+Allele                                         C
+Consequence                   synonymous_variant
+Protein_position                             243
+Amino_acids                                    S
+CLIN_SIG                                       -
+gnomADg_AF                             3.942e-05
+CANONICAL                                    YES
+Name: 29475, dtype: object
+Uploaded_variation    NC_000012.12:g.123221415C>A
+SWISSPROT                              Q99550.165
+REF_ALLELE                                      C
+Allele                                          A
+Consequence                      missense_variant
+Protein_position                              277
+Amino_acids                                   G/C
+CLIN_SIG                                        -
+gnomADg_AF                                      -
+CANONICAL                                     YES
+Name: 31970, dtype: object
+Uploaded_variation    NC_000009.12:g.21971154C>A
+SWISSPROT                             P42771.233
+REF_ALLELE                                     C
+Allele                                         A
+Consequence                          stop_gained
+Protein_position                              69
+Amino_acids                                  E/*
+CLIN_SIG                       likely_pathogenic
+gnomADg_AF                                     -
+CANONICAL                                    YES
+Name: 33007, dtype: object
+Uploaded_variation    NC_000021.9:g.34449526_34449527delinsCC
+SWISSPROT                                          P15382.211
+REF_ALLELE                                                 TG
+Allele                                                     CC
+Consequence                                  missense_variant
+Protein_position                                        36-37
+Amino_acids                                             RS/RG
+CLIN_SIG                               uncertain_significance
+gnomADg_AF                                                  -
+CANONICAL                                                 YES
+Name: 35589, dtype: object
+Uploaded_variation    NC_000011.10:g.19188253_19188257delinsCCCCT
+SWISSPROT                                              P50461.195
+REF_ALLELE                                                  TCCGA
+Allele                                                      CCCCT
+Consequence                                      missense_variant
+Protein_position                                            54-55
+Amino_acids                                                 SE/RG
+CLIN_SIG                                               pathogenic
+gnomADg_AF                                                      -
+CANONICAL                                                     YES
+Name: 39351, dtype: object
+Uploaded_variation    NC_000012.12:g.120097307G>A
+SWISSPROT                              Q15286.205
+REF_ALLELE                                      G
+Allele                                          A
+Consequence                           stop_gained
+Protein_position                              182
+Amino_acids                                   Q/*
+CLIN_SIG                                        -
+gnomADg_AF                                      -
+CANONICAL                                     YES
+Name: 40324, dtype: object
+Uploaded_variation                NC_000006.12:g.43780802G>A
+SWISSPROT                                         P15692.259
+REF_ALLELE                                                 G
+Allele                                                     A
+Consequence           missense_variant,splice_region_variant
+Protein_position                                         345
+Amino_acids                                              V/I
+CLIN_SIG                                                   -
+gnomADg_AF                                          2.63e-05
+CANONICAL                                                YES
+Name: 40873, dtype: object
+Uploaded_variation                 NC_000002.12:g.132673304T>C
+SWISSPROT                                           O14513.137
+REF_ALLELE                                                   T
+Allele                                                       C
+Consequence           splice_region_variant,synonymous_variant
+Protein_position                                          1905
+Amino_acids                                                  E
+CLIN_SIG                                                     -
+gnomADg_AF                                                   -
+CANONICAL                                                  YES
+Name: 41512, dtype: object
+Uploaded_variation    CHR_HSCHR6_MHC_COX_CTG1:g.29667305C>T
+SWISSPROT                                        Q16653.186
+REF_ALLELE                                                C
+Allele                                                    T
+Consequence                                missense_variant
+Protein_position                                        244
+Amino_acids                                             R/C
+CLIN_SIG                                                  -
+gnomADg_AF                                                -
+CANONICAL                                               YES
+Name: 41542, dtype: object
+Uploaded_variation    NC_000006.12:g.31356431_31356433delinsTGA
+SWISSPROT                                            P01889.215
+REF_ALLELE                                                  GGG
+Allele                                                      TGA
+Consequence                                    missense_variant
+Protein_position                                        118-119
+Amino_acids                                               TL/II
+CLIN_SIG                                                      -
+gnomADg_AF                                                    -
+CANONICAL                                                   YES
+Name: 43446, dtype: object
+Uploaded_variation    NC_000010.11:g.18401978G>T
+SWISSPROT                             Q08289.209
+REF_ALLELE                                     G
+Allele                                         T
+Consequence                          stop_gained
+Protein_position                              90
+Amino_acids                                  E/*
+CLIN_SIG                                       -
+gnomADg_AF                                     -
+CANONICAL                                    YES
+Name: 44577, dtype: object
+Uploaded_variation    CHR_HSCHR19_4_CTG3_1:g.55023180G>C
+SWISSPROT                                     Q9HCN6.175
+REF_ALLELE                                             G
+Allele                                                 C
+Consequence                             missense_variant
+Protein_position                                     294
+Amino_acids                                          Q/E
+CLIN_SIG                                               -
+gnomADg_AF                                             -
+CANONICAL                                            YES
+Name: 46212, dtype: object
+Uploaded_variation    CHR_HSCHR19_4_CTG3_1:g.55023275C>A
+SWISSPROT                                     Q9HCN6.175
+REF_ALLELE                                             C
+Allele                                                 A
+Consequence                             missense_variant
+Protein_position                                     262
+Amino_acids                                          C/F
+CLIN_SIG                                               -
+gnomADg_AF                                             -
+CANONICAL                                            YES
+Name: 46490, dtype: object
+Uploaded_variation    NC_000019.10:g.19145917G>A
+SWISSPROT                             Q02080.185
+REF_ALLELE                                     G
+Allele                                         A
+Consequence                   synonymous_variant
+Protein_position                             329
+Amino_acids                                    G
+CLIN_SIG                                       -
+gnomADg_AF                             6.573e-06
+CANONICAL                                    YES
+Name: 46818, dtype: object
+Uploaded_variation    NC_000006.12:g.31357110_31357111delinsCT
+SWISSPROT                                           P01889.215
+REF_ALLELE                                                  GG
+Allele                                                      CT
+Consequence                                   missense_variant
+Protein_position                                         16-17
+Amino_acids                                              AL/AV
+CLIN_SIG                                                     -
+gnomADg_AF                                                   -
+CANONICAL                                                  YES
+Name: 47185, dtype: object
+Uploaded_variation    NC_000017.11:g.45137978C>A
+SWISSPROT                             Q8NC06.145
+REF_ALLELE                                     C
+Allele                                         A
+Consequence                   synonymous_variant
+Protein_position                             213
+Amino_acids                                    P
+CLIN_SIG                                       -
+gnomADg_AF                              6.57e-06
+CANONICAL                                    YES
+Name: 53020, dtype: object
+Uploaded_variation    CHR_HG2419_PATCH:g.144423895G>A
+SWISSPROT                                  Q9UK41.176
+REF_ALLELE                                          G
+Allele                                              A
+Consequence                        synonymous_variant
+Protein_position                                  231
+Amino_acids                                         G
+CLIN_SIG                                            -
+gnomADg_AF                                          -
+CANONICAL                                         YES
+Name: 56007, dtype: object
+Uploaded_variation    NC_000011.10:g.64939693G>C
+SWISSPROT                             Q3KP22.112
+REF_ALLELE                                     G
+Allele                                         C
+Consequence                     missense_variant
+Protein_position                             207
+Amino_acids                                  S/R
+CLIN_SIG                                       -
+gnomADg_AF                                     -
+CANONICAL                                    YES
+Name: 58292, dtype: object
+Uploaded_variation    NC_000001.11:g.45331751_45331752delinsAA
+SWISSPROT                                           Q9UIF7.199
+REF_ALLELE                                                  GC
+Allele                                                      AA
+Consequence                                   missense_variant
+Protein_position                                       337-338
+Amino_acids                                              KP/NS
+CLIN_SIG                                uncertain_significance
+gnomADg_AF                                                   -
+CANONICAL                                                  YES
+Name: 59084, dtype: object
+Uploaded_variation    NC_000017.11:g.42784504_42784505delinsTT
+SWISSPROT                                           Q96J92.183
+REF_ALLELE                                                  GC
+Allele                                                      TT
+Consequence                                   missense_variant
+Protein_position                                       365-366
+Amino_acids                                              ML/IL
+CLIN_SIG                                uncertain_significance
+gnomADg_AF                                                   -
+CANONICAL                                                  YES
+Name: 62300, dtype: object
+Uploaded_variation    NC_000011.10:g.125101239G>A
+SWISSPROT                              A2RU14.101
+REF_ALLELE                                      G
+Allele                                          A
+Consequence                           stop_gained
+Protein_position                               59
+Amino_acids                                   R/*
+CLIN_SIG                               pathogenic
+gnomADg_AF                              4.601e-05
+CANONICAL                                     YES
+Name: 63376, dtype: object
+Uploaded_variation                  NC_000022.11:g.20974064C>T
+SWISSPROT                                           Q96NN9.161
+REF_ALLELE                                                   C
+Allele                                                       T
+Consequence           splice_region_variant,synonymous_variant
+Protein_position                                           119
+Amino_acids                                                  G
+CLIN_SIG                                                     -
+gnomADg_AF                                           1.314e-05
+CANONICAL                                                  YES
+Name: 63397, dtype: object
+Uploaded_variation    NC_000017.11:g.45139061C>T
+SWISSPROT                             Q8NC06.145
+REF_ALLELE                                     C
+Allele                                         T
+Consequence                   synonymous_variant
+Protein_position                             230
+Amino_acids                                    D
+CLIN_SIG                                       -
+gnomADg_AF                             7.227e-05
+CANONICAL                                    YES
+Name: 68932, dtype: object
+Uploaded_variation    CHR_HSCHR6_MHC_SSTO_CTG1:g.33555200C>A
+SWISSPROT                                         O43189.201
+REF_ALLELE                                                 C
+Allele                                                     A
+Consequence                               synonymous_variant
+Protein_position                                         369
+Amino_acids                                                R
+CLIN_SIG                                                   -
+gnomADg_AF                                                 -
+CANONICAL                                                YES
+Name: 71471, dtype: object
+Uploaded_variation    NC_000017.11:g.41725047G>T
+SWISSPROT                             P54257.171
+REF_ALLELE                                     G
+Allele                                         T
+Consequence                     missense_variant
+Protein_position                             505
+Amino_acids                                  A/E
+CLIN_SIG                                       -
+gnomADg_AF                                     -
+CANONICAL                                    YES
+Name: 73356, dtype: object
+Uploaded_variation    NC_000011.10:g.108365439_108365440delinsTT
+SWISSPROT                                             Q13315.252
+REF_ALLELE                                                    GC
+Allele                                                        TT
+Consequence                                     missense_variant
+Protein_position                                       3034-3035
+Amino_acids                                                LL/FF
+CLIN_SIG                                  uncertain_significance
+gnomADg_AF                                                     -
+CANONICAL                                                    YES
+Name: 74330, dtype: object
+Uploaded_variation                  NC_000017.11:g.38878178C>T
+SWISSPROT                                           Q14847.205
+REF_ALLELE                                                   C
+Allele                                                       T
+Consequence           splice_region_variant,synonymous_variant
+Protein_position                                            54
+Amino_acids                                                  N
+CLIN_SIG                                                     -
+gnomADg_AF                                           6.573e-06
+CANONICAL                                                  YES
+Name: 75552, dtype: object
+Uploaded_variation    NC_000023.11:g.54182954G>T
+SWISSPROT                             Q9NX05.143
+REF_ALLELE                                     G
+Allele                                         T
+Consequence                     missense_variant
+Protein_position                              82
+Amino_acids                                  T/N
+CLIN_SIG                                       -
+gnomADg_AF                                     -
+CANONICAL                                    YES
+Name: 76650, dtype: object
+Uploaded_variation                   NC_000019.10:g.6734184G>A
+SWISSPROT                                           Q9NPR9.130
+REF_ALLELE                                                   G
+Allele                                                       A
+Consequence           splice_region_variant,synonymous_variant
+Protein_position                                           166
+Amino_acids                                                  G
+CLIN_SIG                                                     -
+gnomADg_AF                                           6.569e-06
+CANONICAL                                                  YES
+Name: 79139, dtype: object
+Uploaded_variation    NC_000001.11:g.170552147_170552148delinsAC
+SWISSPROT                                             Q5T7V8.137
+REF_ALLELE                                                    GA
+Allele                                                        AC
+Consequence                                     missense_variant
+Protein_position                                         265-266
+Amino_acids                                                KK/KQ
+CLIN_SIG                                                       -
+gnomADg_AF                                                     -
+CANONICAL                                                    YES
+Name: 79493, dtype: object
+Uploaded_variation    NC_000009.12:g.21216909_21216911delinsGAG
+SWISSPROT                                            P05015.186
+REF_ALLELE                                                  CAA
+Allele                                                      GAG
+Consequence                                    missense_variant
+Protein_position                                        132-133
+Amino_acids                                               IA/TP
+CLIN_SIG                                                      -
+gnomADg_AF                                                    -
+CANONICAL                                                   YES
+Name: 84448, dtype: object
+Uploaded_variation    NC_000006.12:g.31356748_31356751delinsTGTT
+SWISSPROT                                             P01889.215
+REF_ALLELE                                                  CCTG
+Allele                                                      TGTT
+Consequence                                     missense_variant
+Protein_position                                           94-95
+Amino_acids                                                QA/NT
+CLIN_SIG                                                       -
+gnomADg_AF                                                     -
+CANONICAL                                                    YES
+Name: 86235, dtype: object
+Uploaded_variation    NC_000011.10:g.108345889_108345890delinsAA
+SWISSPROT                                             Q13315.252
+REF_ALLELE                                                    TG
+Allele                                                        AA
+Consequence                                     missense_variant
+Protein_position                                       2855-2856
+Amino_acids                                                SV/RI
+CLIN_SIG                            likely_pathogenic,pathogenic
+gnomADg_AF                                                     -
+CANONICAL                                                    YES
+Name: 86460, dtype: object
+Uploaded_variation    NC_000020.11:g.3660801C>T
+SWISSPROT                            Q9GZZ7.148
+REF_ALLELE                                    C
+Allele                                        T
+Consequence                  synonymous_variant
+Protein_position                            152
+Amino_acids                                   L
+CLIN_SIG                                      -
+gnomADg_AF                                    -
+CANONICAL                                   YES
+Name: 87160, dtype: object
+Uploaded_variation    NC_000001.11:g.156115272_156115273delinsAG
+SWISSPROT                                             P02545.267
+REF_ALLELE                                                    GC
+Allele                                                        AG
+Consequence               missense_variant,splice_region_variant
+Protein_position                                         118-119
+Amino_acids                                                AR/AG
+CLIN_SIG                                       likely_pathogenic
+gnomADg_AF                                                     -
+CANONICAL                                                    YES
+Name: 98386, dtype: object

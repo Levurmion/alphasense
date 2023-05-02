@@ -30,3 +30,14 @@ def function_timer(message):
 def readFile_as_generator(filePath: str):
    for line in open(filePath):
       yield line
+
+# amino acid dictionaries
+AA_DICT_LTS = {'VAL':'V', 'ILE':'I', 'LEU':'L', 'GLU':'E', 'GLN':'Q',
+'ASP':'D', 'ASN':'N', 'HIS':'H', 'TRP':'W', 'PHE':'F', 'TYR':'Y',
+'ARG':'R', 'LYS':'K', 'SER':'S', 'THR':'T', 'MET':'M', 'ALA':'A',
+'GLY':'G', 'PRO':'P', 'CYS':'C'}
+
+AA_DICT_STL ={'V':'VAL', 'I':'ILE', 'L':'LEU', 'E':'GLU', 'Q':'GLN',
+'D':'ASP', 'N':'ASN', 'H':'HIS', 'W':'TRP', 'F':'PHE', 'Y':'TYR',
+'R':'ARG', 'K':'LYS', 'S':'SER', 'T':'THR', 'M':'MET', 'A':'ALA',
+'G':'GLY', 'P':'PRO', 'C':'CYS'}

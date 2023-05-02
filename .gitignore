@@ -8,6 +8,7 @@ pypy3
 
 #ignore pycache
 *.pyc
+*.pkl
 
 #ignore everything in files folder
 /files
