@@ -19,7 +19,11 @@ parser.add_argument('-o', '--output', help='path and name of the output file rel
 parser.add_argument('-n', '--num_fragments', help='target number of fragments to break the file into. If there are extra lines that cannot be included within the target file quantity, the overflow is going to be saved in an extra file.', required=True)
 parser.add_argument('--headers', help='[option] to include the first line as headers, defaults to False, apply `--headers True` to include headers.', default=False)
 
-args = parser.parse_args()
+try:
+    args = parser.parse_args()
+except:
+    parser.print_help()
+    sys.exit(1)
 
 # get command line arguments
 OUTPUT_FILENAME = args.output.split('/')[-1]
