@@ -2,13 +2,17 @@
 class ModelPDB:
     
     def __init__(self, model: str):
-        self.dbref, self.length, self.sequence, self.plddt, self.coordinates = self.parse_model(model)
+        self.uniprot, self.name, self.length, self.sequence = self.parse_model(model)
 
 
-    # create a Coordinate inner class to steamline access to residue x,y,z CA coordinates
-    class Coordinate:
+    # create a Residue inner class to steamline access to residue attributes
+    class Residue:
 
-        def __init__(self, x: float, y: float, z: float):
+        def __init__(self, residue: str, position: int, plddt: float, x: float, y: float, z: float):
+            self.residue = residue
+            self.position = position
+            self.plddt = plddt
+            self.resID = residue + str(position)
             self.x = x
             self.y = y
             self.z = z
@@ -26,13 +30,19 @@ class ModelPDB:
         'ARG':'R', 'LYS':'K', 'SER':'S', 'THR':'T', 'MET':'M', 'ALA':'A',
         'GLY':'G', 'PRO':'P', 'CYS':'C'}
 
-        dbref: dict = {}
+        uniprot: str = ''
+        name: str = ''
         length: int = 0
         sequence: list = []
-        plddt: list = []
-        coordinates: dict = {}
 
-        currentResNum = 0
+        currentResNum: int = 0
+        currentResName: str = ''
+        currentPlddt: float = 0.0
+        currentX: float = 0.0
+        currentY: float = 0.0
+        currentZ: float = 0.0
+        
+        resCaFound = False
         
         for line in self.readFile_as_generator(modelFilepath):
 
@@ -41,70 +51,91 @@ class ModelPDB:
             LINE_DTYPE = LINE_FIELDS[0]
             
             if LINE_DTYPE == 'DBREF':
-                dbref['uniprot'] = LINE_FIELDS[6]
-                dbref['name'] = LINE_FIELDS[7]
+                uniprot = LINE_FIELDS[6]
+                name = LINE_FIELDS[7]
 
-            elif LINE_DTYPE == 'SEQRES':
-                RES_FIELDS = LINE_FIELDS[4::]
-                for residue in RES_FIELDS:
-                    sequence.append(AA_DICT_LTS[residue.upper()])
-            
             elif LINE_DTYPE == 'ATOM':
                 resNum = int(LINE_FIELDS[5])
                 atomType = LINE_FIELDS[2]
                 if resNum > currentResNum:
-                    plddt.append(float(LINE_FIELDS[10]))
+                    currentPlddt = float(LINE_FIELDS[10])
+                    residue = LINE_FIELDS[3]
+                    currentResName = AA_DICT_LTS[residue.upper()]
                     currentResNum += 1
                 if atomType == 'CA':
-                    coorX = LINE_FIELDS[6]
-                    coorY = LINE_FIELDS[7]
-                    coorZ = LINE_FIELDS[8]
-                    coordinates[str(resNum)] = self.Coordinate(coorX, coorY, coorZ)
+                    currentX = float(LINE_FIELDS[6])
+                    currentY = float(LINE_FIELDS[7])
+                    currentZ = float(LINE_FIELDS[8])
+                    resCaFound = True
                 else:
                     pass
+            
+            if resCaFound == True:
+                sequence.append(self.Residue(
+                    currentResName,
+                    currentResNum,
+                    currentPlddt,
+                    currentX,
+                    currentY,
+                    currentZ)
+                )
+                resCaFound = False
 
         length = len(sequence)
 
-        if len(plddt) == length:
-            pass
-        else:
-            raise RuntimeError('Cannot Intialize Alphafold object: Parsed sequence length and number of extracted plDDT scores did not match.')
-
-        return [dbref, length, sequence, plddt, coordinates]
+        return [uniprot, name, length, sequence]
 
 
-    # getter method to streamline shift in indexing
-    def get_residue(self, *args: list, coordinates=False, plddt=False):
+    # shorthand getter method to get residue properties
+    def get_residues(self, *residueArgs, resId: bool=False, coordinates=False, plddt=False):
 
-        resList = args if type(args[0]) == int else args[0]
-
-        residues: list = []
-
+        residues = residueArgs[0] if len(residueArgs) == 1 and type(residueArgs[0]) == list else residueArgs
+        residueProps: list = []
+        
+        if resId == False:
+            for residue in residues:
+                residueProps.append(self.sequence[residue-1].residue)
+        elif resId == True:
+            for residue in residues:
+                residueProps.append(self.get_resID(residue))
+        
+        coordList: list = []
+        if coordinates == True:
+            for residue in residues:
+                coordList.append(self.get_Ca_coord(residue))
+        
+        plddtList: list = []
+        if plddt == True:
+            for residue in residues:
+                plddtList.append(self.get_plddt(residue))
+            
         if coordinates == True and plddt == True:
-            residues = residues = [(self.sequence[resNum - 1], self.coordinates[str(resNum)], self.plddt[resNum - 1]) for resNum in resList]
+            residueProps = list(zip(residueProps, coordList, plddtList))
         elif coordinates == True:
-            residues = [(resNum, self.sequence[resNum - 1], self.coordinates[str(resNum)]) for resNum in resList]
+            residueProps = list(zip(residueProps, coordList))
         elif plddt == True:
-            residues = [(resNum, self.sequence[resNum - 1], self.plddt[resNum - 1]) for resNum in resList]
-        else:
-            residues = [(resNum, self.sequence[resNum - 1]) for resNum in resList]
+            residueProps = list(zip(residueProps, plddtList))
 
-        return residues
+        return residueProps
     
 
     # getter method to get plDDT for a residue
-    def get_plddt(self, residue):
-        return self.plddt[residue - 1]
+    def get_plddt(self, residue: int):
+        return self.sequence[residue - 1].plddt
     
     # getter method to get residue Ca coordinate
     # returns a residue Coordinate instance
-    def get_Ca_coord(self, residue):
-        return self.coordinates[str(residue)]
+    def get_Ca_coord(self, residue: int):
+        res = self.sequence[residue - 1]
+        return (res.x, res.y, res.z)
+    
+    
+    # getter method to get residue ID in the format resName[position]
+    def get_resID(self, residue: int):
+        return self.sequence[residue - 1].resID
 
 
 
 if __name__ == '__main__':
     alphafold = ModelPDB('./test_files/AF-P04637-F1-model_v4.pdb')
-    print(alphafold.get_residue([1,2],plddt=True))
-    print(alphafold.get_plddt(2))
-    print(alphafold.get_Ca_coord(2).x)
+    print(alphafold.get_residues([1,2,8,9],resId=True,plddt=True,coordinates=True))

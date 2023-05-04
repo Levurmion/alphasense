@@ -21,6 +21,9 @@ class ModelPAE:
         return (PAE_1 + PAE_2)/2
 
 
+
+
+
 if __name__ == '__main__':
     PAE = ModelPAE('./test_files/AF-P04637-F1-predicted_aligned_error_v4.json')
     print(PAE.get_pairwise_PAE(40, 80))
