@@ -1,141 +1,189 @@
+import math
+import numpy as np
+from LoadedKDTree import LoadedKDTree
 
-class ModelPDB:
-    
+class ModelPDB():
+
     def __init__(self, model: str):
-        self.uniprot, self.name, self.length, self.sequence = self.parse_model(model)
-
-
-    # create a Residue inner class to steamline access to residue attributes
-    class Residue:
-
-        def __init__(self, residue: str, position: int, plddt: float, x: float, y: float, z: float):
-            self.residue = residue
-            self.position = position
-            self.plddt = plddt
-            self.resID = residue + str(position)
-            self.x = x
-            self.y = y
-            self.z = z
-
-
-    def readFile_as_generator(self, filePath: str):
+        self.uniprot, self.name, self.length, self.sequence, self.atoms, self.residues = self.parse_model(model)
+        self.atomicKdtree = LoadedKDTree(self.atoms, self.___retrieve_atomic_coord)
+        
+    def readFile_as_generator(self, filePath: str) -> str:
         for line in open(filePath):
             yield line
 
 
-    def parse_model(self, modelFilepath: str):
+    def parse_atom_line(self, pdbLine: str) -> list:
+        '''
+        Note - subtract 1 from these column residuePoss to get index:
+        COLUMNS        DATA  TYPE    FIELD        DEFINITION
+        -------------------------------------------------------------------------------------
+         1 -  4        Record name   "ATOM  "
+         7 - 11        Integer       serial       Atom  serial number.
+        13 - 16        Atom          name         Atom name.
+        17             Character     altLoc       Alternate location indicator.
+        18 - 20        Residue name  resName      Residue name.
+        22             Character     chainID      Chain identifier.
+        23 - 26        Integer       resSeq       Residue sequence number.
+        27             AChar         iCode        Code for insertion of residues.
+        31 - 38        Real(8.3)     x            Orthogonal coordinates for X in Angstroms.
+        39 - 46        Real(8.3)     y            Orthogonal coordinates for Y in Angstroms.
+        47 - 54        Real(8.3)     z            Orthogonal coordinates for Z in Angstroms.
+        55 - 60        Real(6.2)     occupancy    Occupancy.
+        61 - 66        Real(6.2)     tempFactor   Temperature  factor. <-- B-factor/plDDT
+        77 - 78        LString(2)    element      Element symbol, right-justified.
+        79 - 80        LString(2)    charge       Charge  on the atom.
+        '''
 
-        AA_DICT_LTS = {'VAL':'V', 'ILE':'I', 'LEU':'L', 'GLU':'E', 'GLN':'Q',
-        'ASP':'D', 'ASN':'N', 'HIS':'H', 'TRP':'W', 'PHE':'F', 'TYR':'Y',
-        'ARG':'R', 'LYS':'K', 'SER':'S', 'THR':'T', 'MET':'M', 'ALA':'A',
-        'GLY':'G', 'PRO':'P', 'CYS':'C'}
+        atomSer: int = int(pdbLine[6:12].strip())
+        atomName: str = pdbLine[12:16].strip()
+        altLoc: str = pdbLine[16].strip()
+        resName: str = pdbLine[17:20].strip()
+        chain: str = pdbLine[21]
+        resPos: int = int(pdbLine[22:26].strip())
+        x: float = float(pdbLine[30:38].strip())
+        y: float = float(pdbLine[38:46].strip())
+        z: float = float(pdbLine[46:54].strip())
+        occupancy: float = float(pdbLine[54:60].strip())
+        temp: float = float(pdbLine[60:66].strip())
+
+        return (atomSer, atomName, altLoc, resName, chain, resPos, x, y, z, occupancy, temp)
+    
+    
+    def parse_seqres_line(self, pdbLine: str) -> list:
+        residueFields: list = pdbLine[19:70].split()
+        return residueFields
+        
+
+    def parse_model(self, modelFilepath: str) -> list:
+
+        AA_DICT = {'VAL': 'V', 'ILE': 'I', 'LEU': 'L', 'GLU': 'E', 'GLN': 'Q',
+                       'ASP': 'D', 'ASN': 'N', 'HIS': 'H', 'TRP': 'W', 'PHE': 'F', 'TYR': 'Y',
+                       'ARG': 'R', 'LYS': 'K', 'SER': 'S', 'THR': 'T', 'MET': 'M', 'ALA': 'A',
+                       'GLY': 'G', 'PRO': 'P', 'CYS': 'C'}
 
         uniprot: str = ''
         name: str = ''
         length: int = 0
-        sequence: list = []
+        sequence: str = ''
+        atoms: list = []
+        residues: list = []
+        
+        currentPos = 0
+        currentResidue = None
 
-        currentResNum: int = 0
-        currentResName: str = ''
-        currentPlddt: float = 0.0
-        currentX: float = 0.0
-        currentY: float = 0.0
-        currentZ: float = 0.0
-        
-        resCaFound = False
-        
         for line in self.readFile_as_generator(modelFilepath):
 
             # split by whitespace characters
-            LINE_FIELDS = line.split()
-            LINE_DTYPE = LINE_FIELDS[0]
-            
+            LINE_DTYPE = line[0:6].strip()
+
             if LINE_DTYPE == 'DBREF':
-                uniprot = LINE_FIELDS[6]
-                name = LINE_FIELDS[7]
+                uniprot = line[33:41].strip()
+                name = line[42:54].strip()
+
+            if LINE_DTYPE == 'SEQRES':
+                for res in self.parse_seqres_line(line):
+                    sequence += AA_DICT[res]
 
             elif LINE_DTYPE == 'ATOM':
-                resNum = int(LINE_FIELDS[5])
-                atomType = LINE_FIELDS[2]
-                if resNum > currentResNum:
-                    currentPlddt = float(LINE_FIELDS[10])
-                    residue = LINE_FIELDS[3]
-                    currentResName = AA_DICT_LTS[residue.upper()]
-                    currentResNum += 1
-                if atomType == 'CA':
-                    currentX = float(LINE_FIELDS[6])
-                    currentY = float(LINE_FIELDS[7])
-                    currentZ = float(LINE_FIELDS[8])
-                    resCaFound = True
-                else:
-                    pass
+                atomSer, atomName, altLoc, resName, chain, resPos, x, y, z, occupancy, temp = self.parse_atom_line(line)
+                
+                atomInstance = Atom(AA_DICT[resName],resPos,atomName,temp,occupancy,chain,x,y,z)
+                atoms.append(atomInstance)
+                
+                if resPos > currentPos:
+                    if currentResidue != None:
+                        currentResidue.central_coordinate()
+                        residues.append(currentResidue)
+                        currentResidue = Residue(AA_DICT[resName], resPos, chain)
+                        currentResidue.atoms.append(atomInstance)
+                    else:
+                        currentResidue = Residue(AA_DICT[resName], resPos, chain)
+                        currentResidue.atoms.append(atomInstance)
+                elif resPos == currentPos:
+                    currentResidue.atoms.append(atomInstance)
+                    
+                currentPos = resPos
             
-            if resCaFound == True:
-                sequence.append(self.Residue(
-                    currentResName,
-                    currentResNum,
-                    currentPlddt,
-                    currentX,
-                    currentY,
-                    currentZ)
-                )
-                resCaFound = False
-
+            elif LINE_DTYPE == 'TER':
+                currentResidue.central_coordinate()
+                residues.append(currentResidue)
+                    
         length = len(sequence)
 
-        return [uniprot, name, length, sequence]
+        return [uniprot, name, length, sequence, atoms, residues]
+    
 
+    def get_residues(self, *residueArgs, get_instance: bool=False) -> list:
 
-    # shorthand getter method to get residue properties
-    def get_residues(self, *residueArgs, resId: bool=False, coordinates=False, plddt=False):
-
-        residues = residueArgs[0] if len(residueArgs) == 1 and type(residueArgs[0]) == list else residueArgs
-        residueProps: list = []
+        residues = residueArgs[0] if len(residueArgs) == 1 and type(
+            residueArgs[0]) == list else residueArgs
+        residueList: list = []
         
-        if resId == False:
-            for residue in residues:
-                residueProps.append(self.sequence[residue-1].residue)
-        elif resId == True:
-            for residue in residues:
-                residueProps.append(self.get_resID(residue))
+        firstRes = min(residues)
+        lastRes = max(residues)
         
-        coordList: list = []
-        if coordinates == True:
+        if firstRes < 1 or lastRes > self.length:
+            error = f'Residues provided out of range. {self.name} ({self.uniprot}) is {self.length} residues long.'
+            raise ValueError(error)
+
+        if get_instance == False:
             for residue in residues:
-                coordList.append(self.get_Ca_coord(residue))
+                residueList.append(self.residues[residue-1].resId)
+        elif get_instance == True:
+            for residue in residues:
+                residueList.append(self.residues[residue-1])
+
+        return residueList
+
+
+    def ___retrieve_atomic_coord(self, atom):
+        return (atom.x, atom.y, atom.z)
+
+
+# create an Atom class to steamline access to residue attributes
+class Atom:
+    def __init__(self, residue: str, residuePos: int, atomName: str, temp: float, occupancy: float, chain: str, x: float, y: float, z: float):
+        self.residuePos = residuePos
+        self.atomName = atomName
+        self.temp = temp
+        self.resId = residue + str(residuePos)
+        self.occupancy = occupancy
+        self.chain = chain
+        self.x = x
+        self.y = y
+        self.z = z
+    
+    # static method to calculate the euclidian distance between two Atom instances
+    @staticmethod
+    def euclid_dist(atom1, atom2) -> float:
         
-        plddtList: list = []
-        if plddt == True:
-            for residue in residues:
-                plddtList.append(self.get_plddt(residue))
-            
-        if coordinates == True and plddt == True:
-            residueProps = list(zip(residueProps, coordList, plddtList))
-        elif coordinates == True:
-            residueProps = list(zip(residueProps, coordList))
-        elif plddt == True:
-            residueProps = list(zip(residueProps, plddtList))
+        if not isinstance(atom1, Atom) or not isinstance(atom2, Atom):
+            error = 'Static method Atom.euclid_dist(atom1, atom2) only takes instances of the Atom class'
+            raise ValueError(error)
+        else:
+            return math.sqrt((atom1.x - atom2.x)**2 + (atom1.y - atom2.y)**2 + (atom1.z - atom2.z)**2)
 
-        return residueProps
-    
 
-    # getter method to get plDDT for a residue
-    def get_plddt(self, residue: int):
-        return self.sequence[residue - 1].plddt
+# create a Residue class binding Atom-Residue relationships
+class Residue:
+    def __init__(self, residue: str, residuePos: int, chain: str):
+        self.resId = residue + str(residuePos)
+        self.chain = chain
+        self.atoms = []
+        self.center = None 
     
-    # getter method to get residue Ca coordinate
-    # returns a residue Coordinate instance
-    def get_Ca_coord(self, residue: int):
-        res = self.sequence[residue - 1]
-        return (res.x, res.y, res.z)
-    
-    
-    # getter method to get residue ID in the format resName[position]
-    def get_resID(self, residue: int):
-        return self.sequence[residue - 1].resID
-
+    def central_coordinate(self):
+        x, y, z = [
+            np.around(np.mean([atom.x for atom in self.atoms]), decimals=3),
+            np.around(np.mean([atom.y for atom in self.atoms]), decimals=3),
+            np.around(np.mean([atom.z for atom in self.atoms]), decimals=3)
+        ]
+        self.center = (x, y, z)
+        
 
 
 if __name__ == '__main__':
     alphafold = ModelPDB('./test_files/AF-P04637-F1-model_v4.pdb')
-    print(alphafold.get_residues([1,2,8,9],resId=True,plddt=True,coordinates=True))
+    print([atom.atomName for atom in alphafold.residues[392].atoms])
+    print(alphafold.get_residues(1,2,3,4,32,get_instance=True))

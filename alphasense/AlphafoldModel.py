@@ -11,18 +11,15 @@ class AlphafoldModel(ModelPDB,ModelPAE):
    
    
    # evaluate the plddt score of a residue
-   def evaluate_plddt(self, residue: int , threshold: float=70, return_val: bool=False):
+   def evaluate_plddt(self, residue: int , threshold: float=70):
       
       if residue > self.length or residue <= 0:
          raise ValueError(f'Residue out of range. {self.name} ({self.uniprot}) is {self.length}aa long.')
       else:
          plDDT = self.get_plddt(residue)
          
-         if return_val == False:
-            return plDDT >= threshold
-         elif return_val == True:
-            return plDDT
-      
+         return (plDDT, plDDT >= threshold)
+
 
    # evaluate the plddt score as an average sliding window around a residue
    def evaluate_plddt_window(self, residue: int, window: int=5, threshold: float=70, return_val: bool=False):
@@ -44,7 +41,7 @@ class AlphafoldModel(ModelPDB,ModelPAE):
    
    
    # getter method for all unique combinations of residue pairs in a list
-   def get_PAEs(self, residues: list, inc_resName: bool=False, with_query_only: bool=False):
+   def get_PAEs(self, residues: list, with_query_only: bool=False):
       
       RESI_PAIRS: list = []
       
@@ -59,17 +56,12 @@ class AlphafoldModel(ModelPDB,ModelPAE):
       
       RESI_PAIR_PAE = [] 
       
-      if inc_resName == False:
-         for pair in RESI_PAIRS:
-            # returns a list of PAEs based on all unique residue combinations
-            RESI_PAIR_PAE.append(self.get_pairwise_PAE(pair[0], pair[1]))
-      elif inc_resName == True:
-         for pair in RESI_PAIRS:
-            resName1 = self.get_resID(pair[0])
-            resName2 = self.get_resID(pair[1])
-            pairName = f'{resName1}-{resName2}'
-            # returns a list of tuples [(resName1, PAE1), (resName2, PAE2), ...]
-            RESI_PAIR_PAE.append((pairName, self.get_pairwise_PAE(pair[0], pair[1])))
+      for pair in RESI_PAIRS:
+         resName1 = self.get_resID(pair[0])
+         resName2 = self.get_resID(pair[1])
+         pairName = f'{resName1}-{resName2}'
+         # returns a list of tuples [(resName1, PAE1), (resName2, PAE2), ...]
+         RESI_PAIR_PAE.append((pairName, self.get_pairwise_PAE(pair[0], pair[1])))
       
       return RESI_PAIR_PAE
    
@@ -86,4 +78,4 @@ class AlphafoldModel(ModelPDB,ModelPAE):
    
 if __name__ == '__main__':
    alphafoldModel = AlphafoldModel('./test_files/AF-P0CG48-F1-model_v4.pdb','./test_files/AF-P0CG48-F1-predicted_aligned_error_v4.json')
-   print(alphafoldModel.get_avg_PAE([685,630,631]))
+   print(alphafoldModel.get_sequence())
