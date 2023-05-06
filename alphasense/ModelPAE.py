@@ -4,10 +4,11 @@ import numpy as np
 class ModelPAE:
 
     def __init__(self, PAEMatrix: str):
-        self.PAE = self.parse_PAE(PAEMatrix)
+        self.PAE = self.__parse_PAE(PAEMatrix)
+        self.PAEshape = np.shape(self.PAE)
 
 
-    def parse_PAE(self, PAEFilepath: str):
+    def __parse_PAE(self, PAEFilepath: str):
 
         with open(PAEFilepath, 'r') as PAE_JSON:
             PAE_PARSED = json.load(PAE_JSON)

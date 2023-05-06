@@ -1,13 +1,11 @@
 import numpy as np
 from scipy.spatial import KDTree
-from typing import Callable, Iterable, NewType
+from typing import Callable, Iterable
 
 
 class LoadedKDTree(KDTree):
    '''
    The `LoadedKDTree` class is an adapter class derived from `scipy.spatial.KDTree` that provides a layer of abstraction to map custom data payloads with spatial information for use with the `scipy.spatial.KDTree` class. It exposes wrapped `scipy.spatial.KDTree` methods to instead return the corresponding data payloads for each coordinate.
-   
-   The dataset SHOULD NOT contain redundant coordinates mapping to the same `dataObj`. Each coordinate should exclusively map to a unique `dataObj`. Otherwise, previous occurences of entries with identical coordinates will be overwritten by the last occurring `dataObj` in the array.
    '''
    
    def __init__(self, dataObj: list, coord_getter: Callable[[],Iterable]):
