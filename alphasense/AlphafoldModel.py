@@ -26,8 +26,9 @@ class AlphafoldModel(ModelPDB,ModelPAE):
          error = f'The length of the PDB structure and shape of the PAE matrix do not match. The PDB structure {self.name} ({self.uniprot}) is {self.length} residues long and the PAE matrix has the dimensions {self.PAEshape}.'
          raise ValueError(error)
    
+   
    # evaluate the plddt score of a residue
-   def get_plddt(self, residue: int , threshold: float=70):
+   def get_plddt(self, residue: int , threshold: float=70) -> tuple:
       
       if residue > self.length or residue <= 0:
          raise ValueError(f'Residue out of range. {self.name} ({self.uniprot}) is {self.length}aa long.')
@@ -38,7 +39,7 @@ class AlphafoldModel(ModelPDB,ModelPAE):
 
 
    # evaluate the plddt score as an average sliding window around a residue
-   def get_plddt_window(self, residue: int, window: int=5, threshold: float=70):
+   def get_plddt_window(self, residue: int, window: int=5, threshold: float=70) -> tuple:
       
       if window % 2 == 0 or window <= 0:
          raise ValueError('Window needs to be an integer positive odd number.')
