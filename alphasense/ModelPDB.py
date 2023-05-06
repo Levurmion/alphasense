@@ -1,19 +1,29 @@
 import math
 import numpy as np
 from LoadedKDTree import LoadedKDTree
+from collections.abc import Iterable
 
 class ModelPDB():
 
     def __init__(self, model: str):
-        self.uniprot, self.name, self.length, self.sequence, self.atoms, self.residues = self.parse_model(model)
+        self.uniprot, self.name, self.length, self.sequence, self.atoms, self.residues = self.__parse_model(model)
         self.atomicKdtree = LoadedKDTree(self.atoms, self.___retrieve_atomic_coord)
-        
-    def readFile_as_generator(self, filePath: str) -> str:
+
+
+    # dunder methods
+    
+    def __str__(self):
+        return f'Model {self.name} ({self.uniprot}) is {self.length} residues long.'
+
+
+    # private methods (mangled)
+
+    def __readFile_as_generator(self, filePath: str) -> str:
         for line in open(filePath):
             yield line
 
 
-    def parse_atom_line(self, pdbLine: str) -> list:
+    def __parse_atom_line(self, pdbLine: str) -> list:
         '''
         Note - subtract 1 from these column residuePoss to get index:
         COLUMNS        DATA  TYPE    FIELD        DEFINITION
@@ -48,14 +58,14 @@ class ModelPDB():
         temp: float = float(pdbLine[60:66].strip())
 
         return (atomSer, atomName, altLoc, resName, chain, resPos, x, y, z, occupancy, temp)
-    
-    
-    def parse_seqres_line(self, pdbLine: str) -> list:
+
+
+    def __parse_seqres_line(self, pdbLine: str) -> list:
         residueFields: list = pdbLine[19:70].split()
         return residueFields
-        
 
-    def parse_model(self, modelFilepath: str) -> list:
+
+    def __parse_model(self, modelFilepath: str) -> list:
 
         AA_DICT = {'VAL': 'V', 'ILE': 'I', 'LEU': 'L', 'GLU': 'E', 'GLN': 'Q',
                        'ASP': 'D', 'ASN': 'N', 'HIS': 'H', 'TRP': 'W', 'PHE': 'F', 'TYR': 'Y',
@@ -72,7 +82,7 @@ class ModelPDB():
         currentPos = 0
         currentResidue = None
 
-        for line in self.readFile_as_generator(modelFilepath):
+        for line in self.__readFile_as_generator(modelFilepath):
 
             # split by whitespace characters
             LINE_DTYPE = line[0:6].strip()
@@ -82,11 +92,11 @@ class ModelPDB():
                 name = line[42:54].strip()
 
             if LINE_DTYPE == 'SEQRES':
-                for res in self.parse_seqres_line(line):
+                for res in self.__parse_seqres_line(line):
                     sequence += AA_DICT[res]
 
             elif LINE_DTYPE == 'ATOM':
-                atomSer, atomName, altLoc, resName, chain, resPos, x, y, z, occupancy, temp = self.parse_atom_line(line)
+                atomSer, atomName, altLoc, resName, chain, resPos, x, y, z, occupancy, temp = self.__parse_atom_line(line)
                 
                 atomInstance = Atom(AA_DICT[resName],resPos,atomName,temp,occupancy,chain,x,y,z)
                 atoms.append(atomInstance)
@@ -112,7 +122,13 @@ class ModelPDB():
         length = len(sequence)
 
         return [uniprot, name, length, sequence, atoms, residues]
-    
+
+
+    def ___retrieve_atomic_coord(self, atom) -> tuple:
+        return (atom.x, atom.y, atom.z)
+
+
+    # public methods
 
     def get_residues(self, *residueArgs, get_instance: bool=False) -> list:
 
@@ -137,8 +153,41 @@ class ModelPDB():
         return residueList
 
 
-    def ___retrieve_atomic_coord(self, atom):
-        return (atom.x, atom.y, atom.z)
+    def get_residues_within(self, query, radius: float=5.0, from_center: bool=False, get_instance: bool=False) -> list:
+        '''
+        `self.get_residues_within(query, radius: float)` finds all residues within a given `radius` (in Amstrongs) of the `query`. The `query` parameter accepts several types as arguments:
+        
+        - `coordinates: Iterable[float]` = A 3D point in space from which to perform the search.
+        - `atom: <class Atom>` = An instance of the `Atom` class.
+        - `residue: int` = The residue number along the primary sequence of the protein. By default, this will search a space from all atoms registered with the residue within the given `radius`. Optionally, toggle the `from_center` parameter to `True` to only search from the spatial center of the residue.
+        '''
+        
+        stdQuery = None
+        
+        if isinstance(query, Atom):
+            stdQuery = [self.___retrieve_atomic_coord(query)]
+        elif isinstance(query, Iterable) and len(query) == 3 and (isinstance(entry, float) for entry in query):
+            stdQuery = [query]
+        elif isinstance(query, int) and 0 < query <= self.length:
+            if from_center == False:
+                stdQuery = [atom for atom in self.get_residues(query, get_instance=True)[0].atoms]
+            elif from_center == True:
+                stdQuery = [self.get_residues(query, get_instance=True)[0].center]
+                    
+        if stdQuery == None:
+            error = f'The `query` parameter only takes the following as arguments: <class Atom> instance, an iterable representing a 3D point in space, or a residue number. {self.name} ({self.uniprot}) is {self.length} residues long.'
+            raise ValueError(error)
+        
+        neighbours = set()
+        
+        for point in stdQuery:
+            neighbourAtoms = self.atomicKdtree.query_within_radius(point, radius)
+            neighbourResidues = [atom.residuePos for atom in neighbourAtoms]
+            for neighbour in neighbourResidues:
+                neighbours.add(neighbour)
+                
+        return self.get_residues(list(neighbours)) if get_instance == False else self.get_residues(list(neighbours), get_instance=get_instance)
+
 
 
 # create an Atom class to steamline access to residue attributes
@@ -169,6 +218,7 @@ class Atom:
 class Residue:
     def __init__(self, residue: str, residuePos: int, chain: str):
         self.resId = residue + str(residuePos)
+        self.position = residuePos
         self.chain = chain
         self.atoms = []
         self.center = None 
@@ -182,8 +232,9 @@ class Residue:
         self.center = (x, y, z)
         
 
-
 if __name__ == '__main__':
     alphafold = ModelPDB('./test_files/AF-P04637-F1-model_v4.pdb')
     print([atom.atomName for atom in alphafold.residues[392].atoms])
-    print(alphafold.get_residues(1,2,3,4,32,get_instance=True))
+    atoms = alphafold.atoms
+    print(alphafold.get_residues_within(150, 5, from_center=True))
+    print(dir(alphafold))
