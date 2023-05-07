@@ -2,22 +2,93 @@ import math
 import numpy as np
 from LoadedKDTree import LoadedKDTree
 from collections.abc import Iterable
+from typing import Union
 
+# create an Atom class to steamline access to residue attributes
+class Atom:
+    def __init__(self, residue: str, residuePos: int, atomName: str, temp: float, occupancy: float, chain: str, x: float, y: float, z: float):
+        self.residuePos = residuePos
+        self.atomName = atomName
+        self.temp = temp
+        self.resId = residue + str(residuePos)
+        self.occupancy = occupancy
+        self.chain = chain
+        self.x = x
+        self.y = y
+        self.z = z
+    
+    # static method to calculate the euclidian distance between two Atom instances
+    @staticmethod
+    def euclid_dist(atom1, atom2) -> float:
+        
+        if not isinstance(atom1, Atom) or not isinstance(atom2, Atom):
+            error = 'Static method Atom.euclid_dist(atom1, atom2) only takes instances of the Atom class'
+            raise ValueError(error)
+        else:
+            return math.sqrt((atom1.x - atom2.x)**2 + (atom1.y - atom2.y)**2 + (atom1.z - atom2.z)**2)
+
+
+# create a Residue class binding Atom-Residue relationships
+class Residue:
+    def __init__(self, residue: str, residuePos: int, chain: str):
+        self.resId = residue + str(residuePos)
+        self.aa = residue
+        self.position = residuePos
+        self.chain = chain
+        self.atoms = []
+        self.center = None 
+    
+    def central_coordinate(self):
+        x, y, z = [
+            np.around(np.mean([atom.x for atom in self.atoms]), decimals=3),
+            np.around(np.mean([atom.y for atom in self.atoms]), decimals=3),
+            np.around(np.mean([atom.z for atom in self.atoms]), decimals=3)
+        ]
+        self.center = (x, y, z)
+
+
+# create a Chain class to handle multi-chain proteins
+class Chain:
+
+    def __init__(self, residues: list[Residue], chainId: str):
+        self.residues = residues
+        self.chainId = chainId
+        self.length = len(residues)
+        self.sequence = ''.join([residue.aa for residue in residues])
+    
+    # if users just want to get the sequence
+    def __str__(self):
+        printedString = f'chain {self.chainId} ({self.length} residues):\n' + self.sequence
+        return printedString
+    
+    # iterators to loop through the Residue class instances
+    def __iter__(self):
+        self._currentPos = 0
+        return self
+
+    def __next__(self):
+        if self._currentPos < self.length:
+            currentResidue = self.residues[self._currentPos]
+            self._currentPos += 1
+            return currentResidue
+        elif self._currentPos >= self.length:
+            raise StopIteration
+
+
+# PDB object class
 class ModelPDB():
 
     def __init__(self, model: str):
         self.uniprot, self.name, self.length, self.sequence, self.atoms, self.residues = self.__parse_model(model)
-        self.atomicKdtree = LoadedKDTree(self.atoms, self.___retrieve_atomic_coord)
+        self.atomicKdtree = LoadedKDTree(self.atoms, self.__retrieve_atomic_coord)
 
 
     # dunder methods
-    
     def __str__(self):
         return f'Model {self.name} ({self.uniprot}) is {self.length} residues long.'
 
 
     # private methods (mangled)
-
     def __readFile_as_generator(self, filePath: str) -> str:
         for line in open(filePath):
             yield line
@@ -124,12 +195,11 @@ class ModelPDB():
         return [uniprot, name, length, sequence, atoms, residues]
 
 
-    def ___retrieve_atomic_coord(self, atom) -> tuple:
+    def __retrieve_atomic_coord(self, atom) -> tuple:
         return (atom.x, atom.y, atom.z)
 
 
     # public methods
-
     def get_residues(self, *residueArgs, get_instance: bool=False) -> list:
 
         residues = residueArgs[0] if len(residueArgs) == 1 and type(
@@ -153,7 +223,7 @@ class ModelPDB():
         return residueList
 
 
-    def get_residues_within(self, query, radius: float=5.0, from_center: bool=False, get_instance: bool=False) -> list:
+    def get_residues_within(self, query: Union[type[Atom], Iterable, int], radius: float=5.0, from_center: bool=False, get_instance: bool=False) -> list:
         '''
         `self.get_residues_within(query, radius: float)` finds all residues within a given `radius` (in Amstrongs) of the `query`. The `query` parameter accepts several types as arguments:
         
@@ -189,52 +259,9 @@ class ModelPDB():
         return self.get_residues(list(neighbours)) if get_instance == False else self.get_residues(list(neighbours), get_instance=get_instance)
 
 
-
-# create an Atom class to steamline access to residue attributes
-class Atom:
-    def __init__(self, residue: str, residuePos: int, atomName: str, temp: float, occupancy: float, chain: str, x: float, y: float, z: float):
-        self.residuePos = residuePos
-        self.atomName = atomName
-        self.temp = temp
-        self.resId = residue + str(residuePos)
-        self.occupancy = occupancy
-        self.chain = chain
-        self.x = x
-        self.y = y
-        self.z = z
-    
-    # static method to calculate the euclidian distance between two Atom instances
-    @staticmethod
-    def euclid_dist(atom1, atom2) -> float:
-        
-        if not isinstance(atom1, Atom) or not isinstance(atom2, Atom):
-            error = 'Static method Atom.euclid_dist(atom1, atom2) only takes instances of the Atom class'
-            raise ValueError(error)
-        else:
-            return math.sqrt((atom1.x - atom2.x)**2 + (atom1.y - atom2.y)**2 + (atom1.z - atom2.z)**2)
-
-
-# create a Residue class binding Atom-Residue relationships
-class Residue:
-    def __init__(self, residue: str, residuePos: int, chain: str):
-        self.resId = residue + str(residuePos)
-        self.position = residuePos
-        self.chain = chain
-        self.atoms = []
-        self.center = None 
-    
-    def central_coordinate(self):
-        x, y, z = [
-            np.around(np.mean([atom.x for atom in self.atoms]), decimals=3),
-            np.around(np.mean([atom.y for atom in self.atoms]), decimals=3),
-            np.around(np.mean([atom.z for atom in self.atoms]), decimals=3)
-        ]
-        self.center = (x, y, z)
-        
-
 if __name__ == '__main__':
     alphafold = ModelPDB('./test_files/AF-P04637-F1-model_v4.pdb')
-    print([atom.atomName for atom in alphafold.residues[392].atoms])
-    atoms = alphafold.atoms
-    print(alphafold.get_residues_within(150, 5, from_center=True))
-    print(dir(alphafold))
+    
+    chain = Chain(alphafold.residues, 'A')
+    
+    print(chain)
