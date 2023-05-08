@@ -17,6 +17,13 @@ class ModelPAE:
 
     # getter method to obtain the average PAE score for a residue pair
     def get_pairwise_PAE(self, residue1: int, residue2: int):
+        
+        if 0 < residue1 <= self.PAEshape[0] and 0 < residue2 <= self.PAEshape[0]:
+            pass
+        else:
+            residueOutOfRange = f'The provided residue is out of range. The PAE matrix is {self.PAEshape}.'
+            raise ValueError(residueOutOfRange)
+        
         PAE_1 = self.PAE[residue1 - 1][residue2 - 1]
         PAE_2 = self.PAE[residue2 - 1][residue1 - 1]
         return (PAE_1 + PAE_2)/2
@@ -27,4 +34,4 @@ class ModelPAE:
 
 if __name__ == '__main__':
     PAE = ModelPAE('./test_files/AF-P04637-F1-predicted_aligned_error_v4.json')
-    print(PAE.get_pairwise_PAE(40, 80))
+    print(PAE.get_pairwise_PAE(40, 500))

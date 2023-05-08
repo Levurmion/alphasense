@@ -23,7 +23,7 @@ class Atom:
     def euclid_dist(atom1, atom2) -> float:
         
         if not isinstance(atom1, Atom) or not isinstance(atom2, Atom):
-            error = 'Static method Atom.euclid_dist(atom1, atom2) only takes instances of the Atom class'
+            error = 'Static method Atom.euclid_dist(atom1, atom2) only takes instances of the <Atom> class.'
             raise ValueError(error)
         else:
             return math.sqrt((atom1.x - atom2.x)**2 + (atom1.y - atom2.y)**2 + (atom1.z - atom2.z)**2)

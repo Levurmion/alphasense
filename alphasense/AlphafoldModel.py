@@ -103,8 +103,12 @@ class AlphafoldModel(ModelPDB,ModelPAE):
    # get local PAE around a residue based on NN-search
    def get_local_PAE(self, residue: int, radius: float, average: bool=True, from_center: bool=False, with_query_only: bool=True):
       
-      residuesInBubble = self.get_residues_within(residue, radius, from_center=from_center, get_instance=True)
-      residuePositions = [residue.position for residue in residuesInBubble]
+      residuesInBubble: list = self.get_residues_within(residue, radius, from_center=from_center, get_instance=True)
+      residuePositions: list = [residue.position for residue in residuesInBubble]
+      
+      # reposition query residue to the start of the array
+      residuePositions.remove(residue)
+      residuePositions.insert(0, residue)
       
       if len(residuePositions) <= 1:
          print(f'No neighbouring residues found within {radius}Å of {self.get_residue(residue)}. `self.get_local_PAE()` returning -1.')
@@ -136,5 +140,4 @@ class AlphafoldModel(ModelPDB,ModelPAE):
 if __name__ == '__main__':
    alphafoldModel = AlphafoldModel('./test_files/AF-H0YBT0-F1-model_v4.pdb','./test_files/AF-H0YBT0-F1-predicted_aligned_error_v4.json')
    
-   for res in alphafoldModel.get_chain('A'):
-      print(res.aa)
+   print(alphafoldModel.get_local_PAE(200,30,average=True,with_query_only=True))
