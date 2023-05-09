@@ -360,6 +360,7 @@ class ModelPDB():
         - `atom: <class Atom>` = An instance of the `Atom` class.
         - `coordinates: tuple[float, float, float]` = A 3D point in space from which to perform the search.
         - `residue: tuple[str, float] | int` = The residue number along the primary structure of the protein within a specified chain. By default, this will search a space from all atoms registered with the residue within the given `radius`. Optionally, toggle the `from_center` parameter to `True` to only search from the spatial center of the residue.
+        - `from_center: bool` = Defaults to `False`, searches for neighbours atom-to-atom from all atoms in a residue. Toggle to 'True' to search only from the coordinate center of the residue.
         '''
         
         stdQuery = None

@@ -101,7 +101,16 @@ class AlphafoldModel(ModelPDB,ModelPAE):
    
    
    # get local PAE around a residue based on NN-search
-   def get_local_PAE(self, residue: int, radius: float, average: bool=True, from_center: bool=False, with_query_only: bool=True):
+   def get_local_PAE(self, residue: int, radius: float=5, average: bool=True, from_center: bool=False, with_query_only: bool=True):
+      '''
+      Calculate the PAE score between all residue pairs within a given radius of the query.
+      
+      - `residue: int` = residue number along the structure
+      - `radius: float` = sphere radius (in Å) around the query within which to search for neighbouring residues
+      - `average: bool` = Defaults to `True`, returns the calculated average of the PAEs between all residue pairs within the given `radius`. Toggle to `False` to return a list of tuples detailing every `(residue pair, PAE score)` discovered within the sphere.
+      - `from_center: bool` = Defaults to `False`, searches for neighbours atom-to-atom from all atoms in a residue. Toggle to 'True' to search only from the coordinate center of the residue.
+      - `with_query_only: bool` = Defaults to `True`, only considers residue pairs that involve the query. Toggle to `False` to to consider all possible residue pairs discovered within the sphere.
+      '''
       
       residuesInBubble: list = self.get_residues_within(residue, radius, from_center=from_center, get_instance=True)
       residuePositions: list = [residue.position for residue in residuesInBubble]
@@ -120,7 +129,15 @@ class AlphafoldModel(ModelPDB,ModelPAE):
       
    
    # get local plddt around a residue based on NN-search
-   def get_local_plddt(self, residue: int, radius: float, average: bool=True, from_center: bool=False):
+   def get_local_plddt(self, residue: int, radius: float=5, average: bool=True, from_center: bool=False):
+      '''
+      Calculate the average plDDT score for residues within a given radius of the query.
+      
+      - `residue: int` = residue number along the structure
+      - `radius: float` = sphere radius (in Å) around the query within which to search for neighbouring residues
+      - `average: bool` = Defaults to `True`, returns the calculated average of the plDDTs of all residues within the given `radius`. Toggle to `False` to return a list of tuples detailing every `(residue, plDDT score)` discovered within the sphere.
+      - `from_center: bool` = Defaults to `False`, searches for neighbours atom-to-atom from all atoms in a residue. Toggle to 'True' to search only from the coordinate center of the residue.
+      '''
    
       residuesInBubble = self.get_residues_within(residue, radius, from_center=from_center, get_instance=True)
       residuePositions = [residue.position for residue in residuesInBubble]
@@ -138,6 +155,13 @@ class AlphafoldModel(ModelPDB,ModelPAE):
    
    
 if __name__ == '__main__':
-   alphafoldModel = AlphafoldModel('./test_files/AF-H0YBT0-F1-model_v4.pdb','./test_files/AF-H0YBT0-F1-predicted_aligned_error_v4.json')
+
+   from utils.utilities import function_timer
    
-   print(alphafoldModel.get_local_PAE(200,30,average=True,with_query_only=True))
+   alphafoldModel = AlphafoldModel('./test_files/AF-P0CG48-F1-model_v4.pdb','./test_files/AF-P0CG48-F1-predicted_aligned_error_v4.json')
+   
+   @function_timer('runtime: ')
+   def query():
+      alphafoldModel.get_residues_within(300,30)
+      
+   query()
