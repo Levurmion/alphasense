@@ -1,6 +1,10 @@
 import os
 import sys
 import pandas as pd
+from betterpicklejar import *
+
+PickleShelf('pickle_shelf')
+jar = PickleJar()
 
 ROOT_DIR = os.path.join(os.environ.get('PYTHONPATH'))
 

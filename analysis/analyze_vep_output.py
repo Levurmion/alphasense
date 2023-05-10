@@ -2,7 +2,6 @@ import os
 import sys
 import pandas as pd
 import re
-from utilities import function_timer, AA_DICT_LTS
 
 print('starting analysis...')
 
