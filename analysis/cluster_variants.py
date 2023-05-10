@@ -1,22 +1,23 @@
 import os
 import sys
 import pandas as pd
-from utilities import function_timer
+from utils import function_timer
 from collections import defaultdict
 from matplotlib import pyplot as plt
-from betterpicklejar import *
+from pickleconfig import PickleJar, PickleShelf
 
-PickleShelf('pickle_shelf')
 jar = PickleJar()
 
 ROOT_DIR = os.path.join(os.environ.get('PYTHONPATH'))
 
 CLUSTER_MAP_PATH = os.path.join(ROOT_DIR, 'files/uniclust30_2016_03_cluster_mapping.tsv')
-VARIANTS_PATH = os.path.join(ROOT_DIR, 'synced_files/uniprot_missense_variants/pathogenic_mutations_with_lengths.csv')
+VARIANTS_PATH = os.path.join(ROOT_DIR, 'synced_files/uniprot_missense_variants/benign_mutations_with_lengths.csv')
 
 VARS_PER_CLUSTER = defaultdict(list)
 
 UNMAPPABLE = []
+cluster_seeds = []
+
 variants_df = pd.read_csv(VARIANTS_PATH, sep='\t', header=0)
 
 def build_cluster_dict():
@@ -64,29 +65,12 @@ for idx, row in variants_df.iterrows():
     try:
         cluster = CLUSTER_DICT[uniprot]
         VARS_PER_CLUSTER[cluster].append((uniprot, mutation))
+        cluster_seeds.append(cluster)
     except KeyError:
         UNMAPPABLE.append((uniprot, mutation))
+        cluster_seeds.append('-')
 
+variants_df['cluster'] = cluster_seeds
 
-cluster_seeds = VARS_PER_CLUSTER.keys()
-variants_in_cluster = []
+variants_df.to_csv('../synced_files/uniprot_missense_variants/benign_mutations_with_clusters.csv', sep='\t', index=False)
 
-for seed in cluster_seeds:
-    if len(VARS_PER_CLUSTER[seed]) > 15:
-        variants_in_cluster.append((seed, len(VARS_PER_CLUSTER[seed])))
-    else:
-        pass
-    
-variants_in_cluster.sort(key=lambda x: x[1], reverse=True)
-
-labels = [tup[0] for tup in variants_in_cluster]
-common_clusters = [tup[1] for tup in variants_in_cluster]
-
-plt.bar(labels, common_clusters)
-plt.xlabel('cluster seeds')
-plt.ylabel('variants mapped to cluster')
-plt.xticks(rotation=90)
-
-print('unmappable variants: ', len(UNMAPPABLE))
-
-plt.show()
