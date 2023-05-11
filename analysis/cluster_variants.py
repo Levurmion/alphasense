@@ -10,8 +10,8 @@ jar = PickleJar()
 
 ROOT_DIR = os.path.join(os.environ.get('PYTHONPATH'))
 
-CLUSTER_MAP_PATH = os.path.join(ROOT_DIR, 'files/uniclust30_2016_03_cluster_mapping.tsv')
-VARIANTS_PATH = os.path.join(ROOT_DIR, 'synced_files/uniprot_missense_variants/benign_mutations_with_lengths.csv')
+CLUSTER_MAP_PATH = os.path.join(ROOT_DIR, 'files/uniclust30_2018_08.tsv')
+VARIANTS_PATH = os.path.join(ROOT_DIR, 'synced_files/uniprot_missense_variants/pathogenic_mutations_with_lengths.csv')
 
 VARS_PER_CLUSTER = defaultdict(list)
 
@@ -22,21 +22,7 @@ variants_df = pd.read_csv(VARIANTS_PATH, sep='\t', header=0)
 
 def build_cluster_dict():
     
-    cluster_df = None
-
-    try:
-        print('reading reference dataframe from cache')
-        cluster_df = pd.read_pickle('../dataframe_pickles/uniclust30_2016_03_cluster_mapping.pkl')
-    except FileNotFoundError:
-        print('cache not found')
-        
-        cluster_df = pd.read_csv(CLUSTER_MAP_PATH, sep='\t', header=0)
-        
-        print('headers:', cluster_df.columns)
-
-        print('caching reference dataframe')
-        # cache dataframe
-        cluster_df.to_pickle('../dataframe_pickles/uniclust30_2016_03_cluster_mapping.pkl')
+    cluster_df = pd.read_csv(CLUSTER_MAP_PATH, sep='\t', header=0)
     
     clusters = {}
     
@@ -49,7 +35,7 @@ def build_cluster_dict():
         
     return clusters
 
-CLUSTER_DICT = jar.pickle(build_cluster_dict,'CLUSTER_DICT')
+CLUSTER_DICT = jar.pickle(build_cluster_dict,'CLUSTER_DICT_2018')
 
 for idx, row in variants_df.iterrows():
     
@@ -72,5 +58,5 @@ for idx, row in variants_df.iterrows():
 
 variants_df['cluster'] = cluster_seeds
 
-variants_df.to_csv('../synced_files/uniprot_missense_variants/benign_mutations_with_clusters.csv', sep='\t', index=False)
+variants_df.to_csv('../synced_files/uniprot_missense_variants/pathogenic_mutations_with_clusters.csv', sep='\t', index=False)
 
