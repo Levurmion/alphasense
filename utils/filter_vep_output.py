@@ -4,7 +4,7 @@ import argparse
 import re
 import math
 import pandas as pd
-from utils import readFile_as_generator
+from utilities import readFile_as_generator
 
 # establish files path
 
@@ -47,7 +47,7 @@ print(infile_df)
 
 clinicalSigRegex = r'(uncertain|conflicting)'
 benignRegex = r'(benign)'
-pathogenicRegex = r'(pathogenic|damaging)'
+pathogenicRegex = r'(pathogenic)'
 consequenceRegex = r'(missense_variant)'
 
 SEEN_MUTATIONS = {}
@@ -94,6 +94,9 @@ for idx, row in infile_df.iterrows():
                
                elif AF >= 0.01:
                   outfile_benign.append(row_dict)
+               
+               elif AF < 0.01:
+                  outfile_damaging.append(row_dict)
             
          else:
             pass
