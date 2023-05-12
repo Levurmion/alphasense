@@ -35,7 +35,7 @@ def readFile_as_generator(filePath: str):
 AA_DICT_LTS = {'VAL':'V', 'ILE':'I', 'LEU':'L', 'GLU':'E', 'GLN':'Q',
 'ASP':'D', 'ASN':'N', 'HIS':'H', 'TRP':'W', 'PHE':'F', 'TYR':'Y',
 'ARG':'R', 'LYS':'K', 'SER':'S', 'THR':'T', 'MET':'M', 'ALA':'A',
-'GLY':'G', 'PRO':'P', 'CYS':'C'}
+'GLY':'G', 'PRO':'P', 'CYS':'C', 'SEC': 'U'}
 
 AA_DICT_STL ={'V':'VAL', 'I':'ILE', 'L':'LEU', 'E':'GLU', 'Q':'GLN',
 'D':'ASP', 'N':'ASN', 'H':'HIS', 'W':'TRP', 'F':'PHE', 'Y':'TYR',
