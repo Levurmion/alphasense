@@ -64,6 +64,7 @@ for uniprot in UNIPROT_IDS:
    MODEL_PAE_PATH = os.path.join(PDB_PATH, MODEL_PAE)
    
    print(MODEL_PDB_PATH)
+   print(MODEL_PAE_PATH)
    
    try:
       AF_MODELS[uniprot] = AlphafoldModel(MODEL_PDB_PATH, MODEL_PAE_PATH)
@@ -73,6 +74,7 @@ for uniprot in UNIPROT_IDS:
       print(f'{uniprot} not found... \r', end='')
    except ValueError:
       PAE_NO_MATCH.append(uniprot)
+      print(f'{MODEL_PAE_PATH} not found...')
 
 # initialize output columns as dict
 OUTPUT_COLS = {}
