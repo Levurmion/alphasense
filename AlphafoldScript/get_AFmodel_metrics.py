@@ -155,15 +155,15 @@ for variant in VARIANTS_DF.itertuples():
          else:
             pass
 
-VARIANTS_DF = VARIANTS_DF.drop(PROBLEM_VARIANTS)
-VARIANTS_DF = VARIANTS_DF.assign(**OUTPUT_COLS)
+VARIANTS_DF_GOOD = VARIANTS_DF.drop(PROBLEM_VARIANTS)
+VARIANTS_DF_GOOD = VARIANTS_DF_GOOD.assign(**OUTPUT_COLS)
 
 if SCRAP_COL == True:
    COLS_ADDED = list(OUTPUT_COLS.keys())
    COLS_TO_KEEP = ['uniprot', 'position', 'WT'] + COLS_ADDED
-   VARIANTS_DF = VARIANTS_DF[COLS_TO_KEEP]
+   VARIANTS_DF_GOOD = VARIANTS_DF[COLS_TO_KEEP]
 
-VARIANTS_DF.to_csv(OUTPUT_PATH, sep='\t', index=False)
+VARIANTS_DF_GOOD.to_csv(OUTPUT_PATH, sep='\t', index=False)
 
 OUTPUT_DIR = os.path.dirname(OUTPUT_PATH)
 
