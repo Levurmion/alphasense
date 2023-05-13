@@ -196,7 +196,7 @@ class ModelPDB():
 
         title: str = ''
         atoms: list = []
-        chains: list[Chain] = []
+        chains: list = []
         
         # dictionary for information about different Chains
         chainIdentifiers: dict = {}
@@ -303,7 +303,7 @@ class ModelPDB():
         return False
     
     
-    def get_residue(self, residue: Union[int, tuple[str, int]], get_instance: bool=False, by_ref: bool=False) -> Union[str, Residue]:
+    def get_residue(self, residue: Union[int, tuple], get_instance: bool=False, by_ref: bool=False) -> Union[str, Residue]:
         
         queryChain = None
         queryResidue = None
@@ -353,7 +353,7 @@ class ModelPDB():
             return proteinChain.residues[queryResidue].resId if by_ref == False else proteinChain.residues[queryResidue].refId
         
 
-    def get_residues_within(self, query: Union[Atom, tuple[str, int], tuple[float, float, float], int], radius: float=5.0, from_center: bool=False, get_instance: bool=False, by_ref: bool=False) -> Union[list, dict]:
+    def get_residues_within(self, query: Union[Atom, tuple, int], radius: float=5.0, from_center: bool=False, get_instance: bool=False, by_ref: bool=False) -> Union[list, dict]:
         '''
         `self.get_residues_within(query, radius: float)` finds all residues within a given `radius` (in Amstrongs) of the `query`. The `query` parameter accepts several types as arguments:
         
