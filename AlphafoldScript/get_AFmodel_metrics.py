@@ -161,6 +161,7 @@ for variant in VARIANTS_DF.itertuples():
                PLDDTcolname = gen_plddt_win_colname(win)
                OUTPUT_COLS[PLDDTcolname].append('-')
 
+VARIANTS_DF = VARIANTS_DF.drop(PROBLEM_VARIANTS)
 VARIANTS_DF = VARIANTS_DF.assign(**OUTPUT_COLS)
 
 if SCRAP_COL == True:
