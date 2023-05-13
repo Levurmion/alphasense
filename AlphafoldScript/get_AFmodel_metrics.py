@@ -63,6 +63,8 @@ for uniprot in UNIPROT_IDS:
    MODEL_PDB_PATH = os.path.join(PDB_PATH, MODEL_PDB)
    MODEL_PAE_PATH = os.path.join(PDB_PATH, MODEL_PAE)
    
+   print(MODEL_PDB_PATH)
+   
    print(f'Loading {uniprot} into memory... \r', end='')
    
    try:
