@@ -65,12 +65,12 @@ for uniprot in UNIPROT_IDS:
    
    print(MODEL_PDB_PATH)
    
-   print(f'Loading {uniprot} into memory... \r', end='')
-   
    try:
       AF_MODELS[uniprot] = AlphafoldModel(MODEL_PDB_PATH, MODEL_PAE_PATH)
+      print(f'Loading {uniprot} into memory... \r', end='')
    except FileNotFoundError:
       PROBLEM_MODELS.append(uniprot)
+      print(f'{uniprot} not found... \r', end='')
    except ValueError:
       PAE_NO_MATCH.append(uniprot)
 
