@@ -36,7 +36,7 @@ class AlphafoldModel(ModelPDB,ModelPAE):
       return f'{self.title}\n{self.chains[0].dbName} ({self.chains[0].dbSrc}: {self.chains[0].dbAC}) is a <class AlphafoldModel>. {self.chains[0].length} residues long.\n{self.chains[0].sequence}'
    
    # evaluate the plddt score of a residue
-   def get_plddt(self, residue: int , threshold: float=70) -> tuple[float, bool]:
+   def get_plddt(self, residue: int , threshold: float=70) -> tuple:
       
       if residue > self.chains[0].length or residue <= 0:
          raise ValueError(f'Residue out of range. {self.chains[0].dbName} ({self.chains[0].dbAC}) is {self.chains[0].length} residues long.')
@@ -47,7 +47,7 @@ class AlphafoldModel(ModelPDB,ModelPAE):
 
 
    # evaluate the plddt score as an average sliding window around a residue
-   def get_plddt_window(self, residue: int, window: int=5, threshold: float=70) -> tuple[float, bool]:
+   def get_plddt_window(self, residue: int, window: int=5, threshold: float=70) -> tuple:
       
       if window % 2 == 0 or window <= 0:
          raise ValueError('Window needs to be an integer positive odd number.')
@@ -63,7 +63,7 @@ class AlphafoldModel(ModelPDB,ModelPAE):
 
    
    # getter method for all unique combinations of residue pairs in a list
-   def get_PAE(self, residues: list, with_query_only: bool=False) -> tuple[list]:
+   def get_PAE(self, residues: list, with_query_only: bool=False) -> tuple:
       
       if len(residues) <= 1:
          print('Cannot calculate PAE score for only 1 residue!')
