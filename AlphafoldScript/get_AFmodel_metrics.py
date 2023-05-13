@@ -111,7 +111,13 @@ for variant in VARIANTS_DF.itertuples():
       print(f'Currently processing row: {currentRow}\r', end='')
    
    # get corresponding model in memory
-   MODEL: AlphafoldModel = AF_MODELS[getattr(variant, 'uniprot')]
+   MODEL: AlphafoldModel
+   modelNotFound = False
+   
+   try:
+      MODEL = AF_MODELS[getattr(variant, 'uniprot')]
+   except KeyError:
+      modelNotFound = True
    
    # check if residues are identical
    queryPos = int(getattr(variant, 'position'))
@@ -121,19 +127,31 @@ for variant in VARIANTS_DF.itertuples():
       PROBLEM_VARIANTS.append(int(getattr(variant, 'Index')))
    else:
       for rad in RADIUS:
-         PAEcolname = gen_pae_colname(rad)
-         PAE_in_rad = np.round(MODEL.get_local_PAE(queryPos, rad, with_query_only=PAE_QUERY_ONLY),3)
-         OUTPUT_COLS[PAEcolname].append(PAE_in_rad)
+         if modelNotFound == False:
+            PAEcolname = gen_pae_colname(rad)
+            PAE_in_rad = np.round(MODEL.get_local_PAE(queryPos, rad, with_query_only=PAE_QUERY_ONLY),3)
+            OUTPUT_COLS[PAEcolname].append(PAE_in_rad)
 
-         PLDDTcolname = gen_plddt_colname(rad)
-         PLDDT_in_rad = np.round(MODEL.get_local_plddt(queryPos, rad),3)
-         OUTPUT_COLS[PLDDTcolname].append(PLDDT_in_rad)
+            PLDDTcolname = gen_plddt_colname(rad)
+            PLDDT_in_rad = np.round(MODEL.get_local_plddt(queryPos, rad),3)
+            OUTPUT_COLS[PLDDTcolname].append(PLDDT_in_rad)
+         else:
+            PAEcolname = gen_pae_colname(rad)
+            OUTPUT_COLS[PAEcolname].append('-')
+
+            PLDDTcolname = gen_plddt_colname(rad)
+            OUTPUT_COLS[PLDDTcolname].append('-')
       
       if isinstance(PLDDT_WINDOW, list):
-         for win in PLDDT_WINDOW:
-            PLDDTcolname = gen_plddt_win_colname(win)
-            PLDDT_for_win = np.round(MODEL.get_plddt_window(queryPos, win)[0], 3)
-            OUTPUT_COLS[PLDDTcolname].append(PLDDT_for_win)
+         if modelNotFound == False:
+            for win in PLDDT_WINDOW:
+               PLDDTcolname = gen_plddt_win_colname(win)
+               PLDDT_for_win = np.round(MODEL.get_plddt_window(queryPos, win)[0], 3)
+               OUTPUT_COLS[PLDDTcolname].append(PLDDT_for_win)
+         else:
+            for win in PLDDT_WINDOW:
+               PLDDTcolname = gen_plddt_win_colname(win)
+               OUTPUT_COLS[PLDDTcolname].append('-')
 
 VARIANTS_DF = VARIANTS_DF.assign(**OUTPUT_COLS)
 
