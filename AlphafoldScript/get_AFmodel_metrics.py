@@ -123,7 +123,9 @@ for variant in VARIANTS_DF.itertuples():
    queryPos = int(getattr(variant, 'position'))
    WTaa = getattr(variant, 'WT')
    
-   if WTaa != MODEL.get_residue(queryPos)[0]:
+   if modelNotFound == True:
+      PROBLEM_VARIANTS.append(int(getattr(variant, 'Index')))
+   elif WTaa != MODEL.get_residue(queryPos)[0]:
       PROBLEM_VARIANTS.append(int(getattr(variant, 'Index')))
    else:
       for rad in RADIUS:
