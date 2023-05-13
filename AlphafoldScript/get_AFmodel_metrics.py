@@ -61,7 +61,7 @@ for uniprot in UNIPROT_IDS:
    MODEL_PDB = f'AF-{uniprot}-F1-model_v4.pdb'
    MODEL_PAE = f'AF-{uniprot}-F1-predicted_aligned_error_v4.json'
    MODEL_PDB_PATH = os.path.join(PDB_PATH, MODEL_PDB)
-   MODEL_PAE_PATH = os.path.join(PDB_PATH, MODEL_PAE)
+   MODEL_PAE_PATH = os.path.join(PAE_PATH, MODEL_PAE)
    
    print(MODEL_PDB_PATH)
    print(MODEL_PAE_PATH)
