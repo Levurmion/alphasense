@@ -12,3 +12,5 @@ pypy3
 
 #ignore everything in files folder
 /files
+/AlphafoldScript/test_files
+/AlphafoldModel/test_files
