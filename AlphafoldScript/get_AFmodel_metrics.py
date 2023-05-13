@@ -111,7 +111,7 @@ for variant in VARIANTS_DF.itertuples():
       print(f'Currently processing row: {currentRow}\r', end='')
    
    # get corresponding model in memory
-   MODEL: AlphafoldModel
+   MODEL: AlphafoldModel = None
    modelNotFound = False
    
    try:
