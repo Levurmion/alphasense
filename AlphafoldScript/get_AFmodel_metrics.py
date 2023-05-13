@@ -44,9 +44,9 @@ if PLDDT_WINDOW != False:
          pass
 
 # script start
-AF_MODELS: dict[AlphafoldModel] = {}
+AF_MODELS: dict = {}
 
-VARIANTS_DF: type[pd.DataFrame] = pd.read_csv(INPUT_PATH, sep='\t')
+VARIANTS_DF: pd.DataFrame = pd.read_csv(INPUT_PATH, sep='\t')
 
 UNIPROT_IDS = set(VARIANTS_DF['uniprot'])
 
