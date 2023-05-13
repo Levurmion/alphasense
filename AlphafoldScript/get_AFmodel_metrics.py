@@ -12,10 +12,10 @@ parser = argparse.ArgumentParser(
 )
 
 # arguments list
-parser.add_argument('--pdb_dir', help='Absolute path to your Alphafold model directory (PDB format).')
-parser.add_argument('--pae_dir', help='Absolute path to your PAE matrix directory (JSON format).')
-parser.add_argument('-i', '--input', help='Absolute path to your list of missense variants. The file should be a TSV with columns: uniprot, cluster, WT, Mut, position.')
-parser.add_argument('-o', '--output', help='Absolute path to the output directory. File names will be automatically generated based on the name of the input file.')
+parser.add_argument('--pdb_dir', help='Path to your Alphafold model directory (PDB format).')
+parser.add_argument('--pae_dir', help='Path to your PAE matrix directory (JSON format).')
+parser.add_argument('-i', '--input', help='Path to your list of missense variants. The file should be a TSV with columns: uniprot, cluster, WT, Mut, position.')
+parser.add_argument('-o', '--output', help='Path and output filename.')
 parser.add_argument('-r', '--radius', help='A comma-separated argument string of the list of radii to measure the PAE and plDDT scores. ("5.0,5.5,6.0")')
 parser.add_argument('--pae_query_only', help='Flag to calculate the average PAE using residue pairs involving the query only. Default=False.')
 parser.add_argument('--plddt_window', help='A comma-separated argument string of the window size (must be odd numbers) to calculate plDDT scores. ("3,5,7")')
@@ -30,7 +30,7 @@ OUTPUT_PATH: str = args.output
 RADIUS: list = [5] if args.radius == None else [float(radius) for radius in args.radius.split(',')]
 PAE_QUERY_ONLY: bool = True if args.pae_query_only != None else False
 PLDDT_WINDOW = [float(radius) for radius in args.plddt_window.split(',')] if isinstance(args.plddt_window, str) else False
-SCRAP_COL: bool = True if args.keep_ori != None else False
+SCRAP_COL: bool = True if args.scrap_ori != None else False
 
 
 # input check
@@ -52,6 +52,9 @@ UNIPROT_IDS = set(VARIANTS_DF['uniprot'])
 
 print(f'Variants file has {len(UNIPROT_IDS)} unique UniProt IDs.')
 
+PROBLEM_MODELS = []
+PAE_NO_MATCH = []
+
 # load all required Alphafold models
 for uniprot in UNIPROT_IDS:
    
@@ -62,7 +65,12 @@ for uniprot in UNIPROT_IDS:
    
    print(f'Loading {uniprot} into memory... \r', end='')
    
-   AF_MODELS[uniprot] = AlphafoldModel(MODEL_PDB_PATH, MODEL_PAE_PATH)
+   try:
+      AF_MODELS[uniprot] = AlphafoldModel(MODEL_PDB_PATH, MODEL_PAE_PATH)
+   except FileNotFoundError:
+      PROBLEM_MODELS.append(uniprot)
+   except ValueError:
+      PAE_NO_MATCH.append(uniprot)
 
 # initialize output columns as dict
 OUTPUT_COLS = {}
@@ -80,10 +88,9 @@ def gen_plddt_win_colname(win):
 for rad in RADIUS:
    PAEcolname = gen_pae_colname(rad)
    OUTPUT_COLS[PAEcolname] = []
-   
-   if PLDDT_WINDOW == False:
-      PLDDTcolname = gen_plddt_colname(rad)
-      OUTPUT_COLS[PLDDTcolname] = []
+
+   PLDDTcolname = gen_plddt_colname(rad)
+   OUTPUT_COLS[PLDDTcolname] = []
 
 # if we are going by plDDT window
 if isinstance(PLDDT_WINDOW, list):
@@ -99,6 +106,10 @@ PROBLEM_VARIANTS = []
 # get information for each variant
 for variant in VARIANTS_DF.itertuples():
    
+   currentRow = int(getattr(variant, 'Index'))
+   if currentRow % 1000 == 0:
+      print(f'Currently processing row: {currentRow}\r', end='')
+   
    # get corresponding model in memory
    MODEL: AlphafoldModel = AF_MODELS[getattr(variant, 'uniprot')]
    
@@ -113,11 +124,10 @@ for variant in VARIANTS_DF.itertuples():
          PAEcolname = gen_pae_colname(rad)
          PAE_in_rad = np.round(MODEL.get_local_PAE(queryPos, rad, with_query_only=PAE_QUERY_ONLY),3)
          OUTPUT_COLS[PAEcolname].append(PAE_in_rad)
-         
-         if PLDDT_WINDOW == False:
-            PLDDTcolname = gen_plddt_colname(rad)
-            PLDDT_in_rad = np.round(MODEL.get_local_plddt(queryPos, rad),3)
-            OUTPUT_COLS[PLDDTcolname].append(PLDDT_in_rad)
+
+         PLDDTcolname = gen_plddt_colname(rad)
+         PLDDT_in_rad = np.round(MODEL.get_local_plddt(queryPos, rad),3)
+         OUTPUT_COLS[PLDDTcolname].append(PLDDT_in_rad)
       
       if isinstance(PLDDT_WINDOW, list):
          for win in PLDDT_WINDOW:
@@ -127,7 +137,21 @@ for variant in VARIANTS_DF.itertuples():
 
 VARIANTS_DF = VARIANTS_DF.assign(**OUTPUT_COLS)
 
-print(VARIANTS_DF)
+if SCRAP_COL == True:
+   COLS_ADDED = list(OUTPUT_COLS.keys())
+   COLS_TO_KEEP = ['uniprot', 'position', 'WT'] + COLS_ADDED
+   VARIANTS_DF = VARIANTS_DF[COLS_TO_KEEP]
 
+VARIANTS_DF.to_csv(OUTPUT_PATH, sep='\t', index=False)
 
-   
+OUTPUT_DIR = os.path.dirname(OUTPUT_PATH)
+
+if len(PROBLEM_VARIANTS) > 0:
+   PROBLEM_DF: pd.DataFrame = VARIANTS_DF.iloc[PROBLEM_VARIANTS]
+   OUTPUT_FILENAME = OUTPUT_PATH.split('/')[-1]
+   PROBLEM_FILENAME = OUTPUT_FILENAME.replace('.csv','') + '_problems.csv'
+   PROBLEM_PATH = os.path.join(OUTPUT_DIR, PROBLEM_FILENAME)
+   PROBLEM_DF.to_csv(PROBLEM_PATH, sep='\t', index=False)
+
+print(f'{len(PROBLEM_MODELS)} models could not be found.')
+print(f'{len(PAE_NO_MATCH)} PAE matrices did not match/not found')
