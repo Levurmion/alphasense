@@ -144,11 +144,7 @@ for variant in VARIANTS_DF.itertuples():
             PLDDT_in_rad = np.round(MODEL.get_local_plddt(queryPos, rad),3)
             OUTPUT_COLS[PLDDTcolname].append(PLDDT_in_rad)
          else:
-            PAEcolname = gen_pae_colname(rad)
-            OUTPUT_COLS[PAEcolname].append('-')
-
-            PLDDTcolname = gen_plddt_colname(rad)
-            OUTPUT_COLS[PLDDTcolname].append('-')
+            pass
       
       if isinstance(PLDDT_WINDOW, list):
          if modelNotFound == False:
@@ -157,9 +153,7 @@ for variant in VARIANTS_DF.itertuples():
                PLDDT_for_win = np.round(MODEL.get_plddt_window(queryPos, win)[0], 3)
                OUTPUT_COLS[PLDDTcolname].append(PLDDT_for_win)
          else:
-            for win in PLDDT_WINDOW:
-               PLDDTcolname = gen_plddt_win_colname(win)
-               OUTPUT_COLS[PLDDTcolname].append('-')
+            pass
 
 VARIANTS_DF = VARIANTS_DF.drop(PROBLEM_VARIANTS)
 VARIANTS_DF = VARIANTS_DF.assign(**OUTPUT_COLS)
