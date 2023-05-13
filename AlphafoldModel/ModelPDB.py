@@ -53,7 +53,7 @@ class Residue:
 # create a Chain class to handle multi-chain proteins
 class Chain:
 
-    def __init__(self, residues: list[Residue], chainId: str, dbSrc: str, dbAC: str, dbName: str, refStart: int):
+    def __init__(self, residues: list, chainId: str, dbSrc: str, dbAC: str, dbName: str, refStart: int):
         self.residues = residues
         self.chainId = chainId
         self.refStart = refStart
