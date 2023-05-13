@@ -120,12 +120,18 @@ for variant in VARIANTS_DF.itertuples():
       modelNotFound = True
    
    # check if residues are identical
-   queryPos = int(getattr(variant, 'position'))
+   queryPos: int = None
+   
+   try:
+      queryPos = int(getattr(variant, 'position'))
+   except ValueError:
+      pass
+   
    WTaa = getattr(variant, 'WT')
    
    if modelNotFound == True:
       PROBLEM_VARIANTS.append(int(getattr(variant, 'Index')))
-   elif WTaa != MODEL.get_residue(queryPos)[0]:
+   elif WTaa != MODEL.get_residue(queryPos)[0] or queryPos == None:
       PROBLEM_VARIANTS.append(int(getattr(variant, 'Index')))
    else:
       for rad in RADIUS:
