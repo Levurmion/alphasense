@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from LoadedKDTree import LoadedKDTree
+from .LoadedKDTree import LoadedKDTree
 from collections.abc import Iterable, Collection
 from typing import Union
 from collections import defaultdict

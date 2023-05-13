@@ -1,0 +1,1 @@
+from .AlphafoldModel import AlphafoldModel

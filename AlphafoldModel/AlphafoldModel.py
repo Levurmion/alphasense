@@ -1,5 +1,5 @@
-from ModelPDB import ModelPDB
-from ModelPAE import ModelPAE
+from .ModelPDB import ModelPDB
+from .ModelPAE import ModelPAE
 from itertools import combinations
 import numpy as np
 import warnings
@@ -55,8 +55,8 @@ class AlphafoldModel(ModelPDB,ModelPAE):
          raise ValueError(f'Residue out of range. {self.chains[0].dbName} ({self.chains[0].dbAC}) is {self.chains[0].length}aa long.')
       else:
          windowLeft = residue-(window//2) if residue-(window//2) > 1 else 1
-         windowRight = residue+(window//2)+1 if residue+(window//2) <= self.length else self.length + 1
-         residuePlddts = [self.get_plddt(res) for res in range(windowLeft,windowRight,1)]
+         windowRight = residue+(window//2)+1 if residue+(window//2) <= self.chains[0].length else self.chains[0].length + 1
+         residuePlddts = [self.get_plddt(res) for res in range(int(windowLeft),int(windowRight),1)]
          averagePlddt = np.mean([resRecord[0] for resRecord in residuePlddts])
          
          return (averagePlddt, averagePlddt >= threshold)
@@ -160,8 +160,4 @@ if __name__ == '__main__':
    
    alphafoldModel = AlphafoldModel('./test_files/AF-P0CG48-F1-model_v4.pdb','./test_files/AF-P0CG48-F1-predicted_aligned_error_v4.json')
    
-   @function_timer('runtime: ')
-   def query():
-      alphafoldModel.get_residues_within(300,30)
-      
-   query()
+   print(alphafoldModel.get_plddt_window(20,5))
