@@ -10,8 +10,8 @@ jar = PickleJar()
 
 ROOT_DIR = os.path.join(os.environ.get('PYTHONPATH'))
 
-CLUSTER_MAP_PATH = os.path.join(ROOT_DIR, 'synced_files/humsavar/humsavar.tsv')
-VARIANTS_PATH = os.path.join(ROOT_DIR, 'synced_files/humsavar/humsavar.csv')
+CLUSTER_MAP_PATH = os.path.join(ROOT_DIR, 'synced_files/vep_variants/humsavar.tsv')
+VARIANTS_PATH = os.path.join(ROOT_DIR, 'synced_files/vep_variants/vep_pathogenic_variants.csv')
 
 VARS_PER_CLUSTER = defaultdict(list)
 
@@ -42,7 +42,7 @@ for idx, row in variants_df.iterrows():
     if idx % 1000 == 0:
         print(f'processing line: {idx}\r', end='')
     
-    uniprot = row['AC']
+    uniprot = row['uniprot']
     
     try:
         cluster = CLUSTER_DICT[uniprot]
@@ -51,6 +51,7 @@ for idx, row in variants_df.iterrows():
         cluster_seeds.append('-')
 
 variants_df['cluster'] = cluster_seeds
+variants_df['category'] = 'LP/P'
 
-variants_df.to_csv(ROOT_DIR + '/synced_files/humsavar/humsavar_with_cluster.tsv', sep='\t', index=False)
+variants_df.to_csv(ROOT_DIR + '/synced_files/vep_variants/vep_pathogenic_variants_with_cluster.csv', sep='\t', index=False)
 
